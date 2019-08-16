@@ -24,7 +24,7 @@ public class Flat{
 	public int getNumberOfRooms(){
 		return this.numbers_of_rooms;
 	}
-	public void setNumbersOfRooms(int new_numbers_of_rooms){
+	public void setNumberOfRooms(int new_numbers_of_rooms){
 		this.numbers_of_rooms=new_numbers_of_rooms;
 	}
 	public double getSquare(){

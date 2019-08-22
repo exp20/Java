@@ -1,0 +1,45 @@
+package t1.buildings.office;
+
+public class Office{
+	private final int DEFAULT_NUMBER_OF_ROOMS=1;
+	private final double DEFAULT_SQUARE=250;
+
+	private int number_of_rooms;
+	private double square;
+	
+	public Office(){
+		this.number_of_rooms=DEFAULT_NUMBER_OF_ROOMS;
+		this.square=DEFAULT_SQUARE;
+	}
+
+	public Office(double square){
+		this.square = square;
+		this.number_of_rooms = DEFAULT_NUMBER_OF_ROOMS;
+	}
+
+	public Office(int number_of_rooms, double square){
+		this.number_of_rooms=number_of_rooms;
+		this.square=square;
+	}
+
+	public int getNumberOfRooms(){
+		return this.number_of_rooms;
+	}
+
+	public void setNumberOfRooms(int new_number_of_rooms){
+		this.number_of_rooms=new_number_of_rooms;
+	}
+
+	public double getSquare(){
+		return this.square;
+	}
+
+	public void setSquare(double new_square){
+		this.square=new_square;
+	}
+
+	public String toString(){
+		return "Office ("+this.number_of_rooms+", "+this.square+")";
+	}
+	
+}

@@ -1,15 +1,16 @@
 
 import java.util.Arrays;
-import t1.buildings.*;
-import t1.*;
+import t1.buildings.dwelling.*;
+import t1.buildings.office.*;
 import static java.lang.System.out;
+
 public class Test{
 
 public static void main(String[] arg){
 	
 	//тесты классов Flat, DwellingFloor, Dwelling;
-	/**
-	Flat f1= new Flat();
+	
+	Flat f1 = new Flat();
 	System.out.println(f1);
 	f1 = new Flat(22,55);
 	System.out.println(f1);
@@ -29,7 +30,7 @@ public static void main(String[] arg){
 
 	floor1.addFlatToFloor(4,new Flat(4,4));
 	floor1.addFlatToFloor(3,new Flat(3,3));
-	floor1.addFlatToFloor(0,new Flat(0,0));
+	floor1.addFlatToFloor(0,new Flat(10,10));
 	System.out.println(floor1);
 
 	floor1.dellFlat(0);
@@ -87,9 +88,9 @@ public static void main(String[] arg){
 			}
 		}
 		System.out.println(Arrays.toString(s));
-*/
 
-/**
+
+
 	Office of1= new Office();
 	out.println(of1);
 	of1.setSquare(100);
@@ -111,7 +112,7 @@ public static void main(String[] arg){
 	out.println(off_array[2]);
 
 	of_floor1.addOfficeToFloor(3, new Office(10,10));
-	of_floor1.addOfficeToFloor(0, new Office(0,0));
+	of_floor1.addOfficeToFloor(0, new Office(1,1));
 	of_floor1.addOfficeToFloor(2, new Office(22,22));
 	out.println(of_floor1);
 
@@ -120,7 +121,7 @@ public static void main(String[] arg){
 	of_floor1.dellOffice(0);
 	of_floor1.dellOffice(of_floor1.getNumberOfOffices()-1);
 	out.println(of_floor1);
-	*/
+
 	
 	OfficeBuilding of_build = new OfficeBuilding(3, new int[]{3,3,2});
 	out.println(of_build);
@@ -160,6 +161,7 @@ public static void main(String[] arg){
 	for(Office of:sort_of_build2){
 		out.println(of.getSquare());
 	}
-
+	//of_build2.dellOffice(-1);
 	}
+
 }

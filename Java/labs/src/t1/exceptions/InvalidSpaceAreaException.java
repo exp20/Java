@@ -1,9 +1,9 @@
 //Ошибка некорретной площади помещения
 package t1.exceptions;
 public class InvalidSpaceAreaException extends IllegalArgumentException{
-	InvalidSpaceAreaException(){}
+	public InvalidSpaceAreaException(){}
 
-	InvalidSpaceAreaException(String str){
+	public InvalidSpaceAreaException(String str){
 	super(str);
 	}
 }

@@ -2,7 +2,7 @@
 Класс описывающий жилое здание, основывающийся на массиве этажей DwellingFloor
 */
 package t1.buildings.dwelling;
-
+import t1.exceptions.*;
 import t1.buildings.*;
 
 public class Dwelling{
@@ -49,15 +49,16 @@ public class Dwelling{
 	}
 
 	public DwellingFloor getDwellingFloorByNumber(int number_of_floor){
-		if (number_of_floor<0 || number_of_floor > this.floors_array.length-1) System.out.println("getDwellingFloorByNumber: wrong dwellingfloor number");
+		if (number_of_floor < 0 || number_of_floor > this.floors_array.length-1) 
+			throw new FloorIndexOutOfBoundsException();
 		 else{
 		 	return this.floors_array[number_of_floor];
 		 }
-		 return null;
 	}
 	//метод изменения этажа по его номеру в доме и ссылке на обновленный этаж.
 	public void setDwellingFloor(int number_of_dwelling_floor, DwellingFloor new_dwelling_floor){
-		if (number_of_dwelling_floor<0 || number_of_dwelling_floor>this.floors_array.length-1) System.out.println("setDwellingFloor: wrong number_of_dwelling_floor");
+		if (number_of_dwelling_floor < 0 || number_of_dwelling_floor > this.floors_array.length-1)
+			throw new FloorIndexOutOfBoundsException();
 		else{
 			this.floors_array[number_of_dwelling_floor]=new_dwelling_floor;
 		}
@@ -66,16 +67,17 @@ public class Dwelling{
 	}
 	//метод получения объекта квартиры по ее номеру в доме
 	public Flat getFlatByNumber(int number_of_flat){
-		if (number_of_flat<0 || number_of_flat>this.getTotalNumberOfFlats()-1) System.out.println("getFlatByNumber: wrong number_of_flat");
+		if (number_of_flat < 0 || number_of_flat > this.getTotalNumberOfFlats()-1) 
+			throw new SpaceIndexOutOfBoundsException();
 		else{
 			int[] flat_index=this.getFlatIndex(number_of_flat);
 			return this.floors_array[flat_index[0]].getFlatByNumber(flat_index[1]);
 			}
-		return null;
 	}
 	//метод изменения объекта квартиры по ее номеру в доме и ссылке типа квартиры.
 	public void setFlat(int number_of_flat, Flat new_flat){
-		if (number_of_flat<0 || number_of_flat>this.getTotalNumberOfFlats()-1) System.out.println("setFlat: wrong number_of_flat");
+		if (number_of_flat<0 || number_of_flat>this.getTotalNumberOfFlats()-1) 
+			throw new SpaceIndexOutOfBoundsException();
 		else{
 			Flat flat=this.getFlatByNumber(number_of_flat);
 			flat.setSquare(new_flat.getSquare());
@@ -97,7 +99,8 @@ public class Dwelling{
 }
 	//метод добавления квартиры в дом по будущему номеру квартиры в доме (т.е. в параметрах указывается номер, который должны иметь квартира после вставки) и ссылке на квартиру (количество этажей в доме при этом не увеличивается).
 	public void addFlat(int number_of_new_flat, Flat new_flat) {
-		if(number_of_new_flat<0 || number_of_new_flat> this.getTotalNumberOfFlats()) System.out.println("addFlat: wrong number_of_new_flat");
+		if(number_of_new_flat<0 || number_of_new_flat> this.getTotalNumberOfFlats())
+		 throw new SpaceIndexOutOfBoundsException("wrong new index");
 		else{
 			int buff_flat_index=number_of_new_flat;
 			for(int i =0; i < this.floors_array.length; i++){
@@ -114,7 +117,8 @@ public class Dwelling{
 }
 	//Создайте метод удаления квартиры по ее номеру в доме.
 	public void dellFlat(int number_of_dell_flat){
-		if(number_of_dell_flat<0 || number_of_dell_flat> this.getTotalNumberOfFlats()-1) System.out.println("dellFlat: wrong number_of_flat");
+		if(number_of_dell_flat<0 || number_of_dell_flat> this.getTotalNumberOfFlats()-1) 
+			throw new SpaceIndexOutOfBoundsException();
 		else{
 			int[] dell_flat_index=this.getFlatIndex(number_of_dell_flat);
 			this.floors_array[dell_flat_index[0]].dellFlat(dell_flat_index[1]);
@@ -122,7 +126,7 @@ public class Dwelling{
 	}
 	//метод получения самой большой по площади квартиры дома.
 	public Flat getBestSpace(){
-		Flat buff_best_space_flat = new Flat(1,0);
+		Flat buff_best_space_flat = this.getFlatByNumber(0);
 		for (DwellingFloor floor : this.floors_array){
 			if (floor.getBestSpace().getSquare()>buff_best_space_flat.getSquare()){
 				buff_best_space_flat=floor.getBestSpace();

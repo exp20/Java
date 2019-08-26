@@ -1,9 +1,9 @@
 //Ошибка некорретного количества комнат в помещении
 package t1.exceptions;
 public class InvalidRoomsCountException extends IllegalArgumentException{
-	InvalidRoomsCountException(){}
+	public InvalidRoomsCountException(){}
 
-	InvalidRoomsCountException(String str){
+	public InvalidRoomsCountException(String str){
 		super(str);
 	}
 }

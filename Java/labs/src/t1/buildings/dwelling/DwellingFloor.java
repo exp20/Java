@@ -2,7 +2,7 @@
 Класс описывающий этаж жилого здания
 */
 package t1.buildings.dwelling;
-
+import t1.exceptions.*;
 import t1.buildings.*;
 
 public class DwellingFloor{
@@ -55,9 +55,8 @@ public class DwellingFloor{
 	}
 	//получение квартиры по её номеру на этаже
 	public Flat getFlatByNumber(int number){
-		if(number < 0 || number>this.flats_array.length){
-		System.out.println(" getFlatByNumber: wrong flat number"); 
-		return null;
+		if(number < 0 || number >= this.flats_array.length){
+		throw new SpaceIndexOutOfBoundsException();
 		}
 		else{
 			//return new Flat(this.flats_array[i].getNumberOfRooms(),this.flats_array[i].getSquare());
@@ -67,9 +66,8 @@ public class DwellingFloor{
 	}
 	//изменение квартиры по её номеру на этаже и ссылке на новую квартиру 
 	public void setFlat(int number_of_flat,Flat new_flat){
-		if(number_of_flat < 0 || number_of_flat>this.flats_array.length-1){
-		 System.out.println(" setFlat: wrong flat number"); 
-		return;
+		if(number_of_flat < 0 || (number_of_flat>this.flats_array.length-1)){
+		 throw new SpaceIndexOutOfBoundsException();
 		}
 		else{
 			this.flats_array[number_of_flat].setSquare(new_flat.getSquare());
@@ -79,9 +77,8 @@ public class DwellingFloor{
 	
 	//добавление новый квартиры на этаж по будущему номеру
 	public void addFlatToFloor(int new_number, Flat new_flat){
-		if (new_number>this.flats_array.length || new_number<0){ //так как пропусков не должно быть
-			System.out.println("Error: addFlatToFloor (new number > flats_array or < 0 )"); 
-			return;
+		if (new_number > this.flats_array.length || new_number < 0 ){ //так как пропусков не должно быть
+			throw new SpaceIndexOutOfBoundsException("wrong new index");
 		}
 		else{
 			Flat[] new_flats_array = new Flat[this.flats_array.length+1];
@@ -103,8 +100,8 @@ public class DwellingFloor{
 	}
 	//удаление квартиры по её номеру на этаже
 	public void dellFlat(int number){
-		if(number<0||number>this.flats_array.length-1){
-			System.out.println("dellFlat: wrong number");
+		if(number < 0 || number > this.flats_array.length-1){
+			throw new SpaceIndexOutOfBoundsException();
 		}
 		else{
 			Flat[] new_flats_array= new Flat[this.flats_array.length-1];

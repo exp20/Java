@@ -2,6 +2,7 @@
 Класс предсталящий квартиру жилого дома которая имеет площадь и количество комнат
 */
 package t1.buildings.dwelling;
+import t1.exceptions.*;
 
 public class Flat{
 	private final int DEF_NUMBERS_OF_ROOMS=2;
@@ -14,24 +15,51 @@ public class Flat{
 		this.square=DEF_SQUARE;
 	}
 	public Flat(double square){
+		
 		this.numbers_of_rooms=DEF_NUMBERS_OF_ROOMS;
+		if (square<=0){
+			throw new InvalidSpaceAreaException("wrong area square");
+		}
+		else{
 		this.square=square;
+		}
 	}
 	public Flat(int numbers_of_rooms, double square){
-		this.numbers_of_rooms=numbers_of_rooms;
+		if (numbers_of_rooms<=0){
+			throw new InvalidRoomsCountException("wrong numbers of rooms");
+		}
+		else{
+			this.numbers_of_rooms=numbers_of_rooms;
+		}
+		if (square<=0){
+			throw new InvalidSpaceAreaException("wrong area square");
+		}
+		else{
 		this.square=square;
+		}
 	}
 	public int getNumberOfRooms(){
 		return this.numbers_of_rooms;
 	}
 	public void setNumberOfRooms(int new_numbers_of_rooms){
-		this.numbers_of_rooms=new_numbers_of_rooms;
+		if (new_numbers_of_rooms<=0){
+			throw new InvalidRoomsCountException("wrong numbers of rooms");
+		}
+		else{
+			this.numbers_of_rooms=new_numbers_of_rooms;
+		}
 	}
 	public double getSquare(){
 		return this.square;
 	}
 	public void setSquare(double new_square){
+		if (new_square<=0){
+			throw new InvalidSpaceAreaException("wrong area square");
+		}
+		else{
 		this.square=new_square;
+		}
+		
 	}
 	
 	public String toString(){

@@ -2,7 +2,9 @@
 Работа класса основана на двусвязном циклическом списке этажей с выделенной головой.
 */
 package t1.buildings.office;
+
 import t1.buildings.office.*;
+import t1.exceptions.*;
 
 public class OfficeBuilding{
 	private Node head = null;
@@ -117,16 +119,21 @@ public class OfficeBuilding{
 
 	//метод получения объекта этажа, по его номеру в здании.
 	public OfficeFloor getOfficeFloor(int number){
+		if (this.number_of_elements <= number || number < 0){
+			throw new FloorIndexOutOfBoundsException();
+		}
+		else
+		{
 		return this.getNode(number, this.head).getData();
+		}
 	}
 
 	//метод изменения этажа по его номеру в здании и ссылке на обновленный этаж
 	public void setOfficeFloor(int index, OfficeFloor new_office_floor){
 		if(index < 0 || index > this.number_of_elements-1){
-			System.out.println("setOfficeFloor: wrong index");
+			throw new FloorIndexOutOfBoundsException();
 		}
 		else{
-
 		Office[] array_off = new_office_floor.getOfficesArray();
 		Node ch_floor= getNode(index, this.head);
 		ch_floor.setData(new OfficeFloor(array_off));
@@ -135,21 +142,31 @@ public class OfficeBuilding{
 
 	//метод получения объекта офиса по его номеру в офисном здании
 	public Office getOfficeByNumber(int number_of_office){
+		if (this.getTotalNumberOfOffices() <= number_of_office || number_of_office < 0){
+			throw new SpaceIndexOutOfBoundsException();
+		}
+		else{
 		int[] off_indexes=this.getOfficeIndex(number_of_office);
 		return this.getOfficeFloor(off_indexes[0]).getOfficeByNumber(off_indexes[1]);
+		}
 	}
 
 	//метод изменения объекта офиса по его номеру в доме и ссылке типа офиса.
 	public void setOffice(int number_of_office, Office new_office){
-		Office set_office = this.getOfficeByNumber(number_of_office);
-		set_office.setNumberOfRooms(new_office.getNumberOfRooms());
-		set_office.setSquare(new_office.getSquare());
+		if (this.getTotalNumberOfOffices() <= number_of_office || number_of_office < 0){
+			throw new SpaceIndexOutOfBoundsException();
+		}
+		else{
+			Office set_office = this.getOfficeByNumber(number_of_office);
+			set_office.setNumberOfRooms(new_office.getNumberOfRooms());
+			set_office.setSquare(new_office.getSquare());
+		}
 	}
 
 	//метод добавления офиса в здание по номеру офиса в здании и ссылке на офис
 	public void addOffice(int new_index, Office new_office){
-		if (new_index > this.getTotalNumberOfOffices()){
-			System.out.println("addOffice : wrong new_index");
+		if (new_index > this.getTotalNumberOfOffices() || new_index < 0){
+			throw new SpaceIndexOutOfBoundsException("wrong new index");
 		}
 		else
 		{
@@ -225,18 +242,17 @@ public class OfficeBuilding{
 
 	//метод удаления офиса по его номеру в здании.
 	public void dellOffice(int dell_numb){
-		int[] office_dell_index=this.getOfficeIndex(dell_numb);
-		this.getOfficeFloor(office_dell_index[0]).dellOffice(office_dell_index[1]);
+		if (this.getTotalNumberOfOffices() <= dell_numb || dell_numb < 0){
+			throw new SpaceIndexOutOfBoundsException();
+		}
+		else{
+			int[] office_dell_index=this.getOfficeIndex(dell_numb);
+			this.getOfficeFloor(office_dell_index[0]).dellOffice(office_dell_index[1]);
+		}
 	} 
 
 	//метод получения номера этажа на котором расположена квартира по номеру и номера квартиры относительно этого этажа
 	private int[] getOfficeIndex(int number_of_office){
-		if (number_of_office > this.getTotalNumberOfOffices()-1){
-			System.out.println("getOfficeIndex : wrong number_of_office");
-			return null;
-		}
-		else
-		{
 			int buff_index = number_of_office;
 			Node floor_buff = this.head.getNextLink();
 			int buff_numb_floor_offices =0;
@@ -250,76 +266,59 @@ public class OfficeBuilding{
 				floor_buff=floor_buff.getNextLink();
 				}
 			}
-		}
 
 		return null;
 	}
 
 
 	private Node getNode(int number, Node next_elem){
-		if (this.number_of_elements<number ||  number_of_elements < 0){
-			System.out.println("getNode: wrong number_of_elements ");
-			return null;
+		if(number == 0 ){ //хвост рекурсии, при этом next_elem указывает на head
+		return next_elem.getNextLink();
 		}
-
-		else{	
-				if(number == 0 ){ //хвост рекурсии, при этом next_elem указывает на head
-					return next_elem.getNextLink();
-				}
-				else{
-					return getNode(--number, next_elem.getNextLink());
-				}
-			}	
+		else{
+			return getNode(--number, next_elem.getNextLink());
+		}
+				
 	}
 
 	private void addNode(int new_element_index, Node new_element){
-		if (this.number_of_elements < new_element_index) System.out.println(" addNode: wrong new_element_index ");
-		else { 
-			Node new_node = new Node (new_element.getData());
-			if (this.number_of_elements==0){ //вставка в начало
-				this.head.setNextLink(new_node);
+		Node new_node = new Node (new_element.getData());
+		if (this.number_of_elements==0){ //вставка в начало
+			this.head.setNextLink(new_node);
+			new_node.setNextLink(this.head);
+			this.head.setPrevLink(new_node);
+			new_node.setPrevLink(this.head);
+			this.number_of_elements++;
+		}
+		else{ //вставка в середину или в конец
+			if (new_element_index == this.number_of_elements){
+				Node prev_node = getNode(new_element_index-1,this.head);
+				prev_node.setNextLink(new_node);
 				new_node.setNextLink(this.head);
-				this.head.setPrevLink(new_node);
-				new_node.setPrevLink(this.head);
+				new_node.setPrevLink(prev_node);
 				this.number_of_elements++;
 			}
-			else{ //вставка в середину или в конец
-				if (new_element_index == this.number_of_elements){
-					Node prev_node = getNode(new_element_index-1,this.head);
-					prev_node.setNextLink(new_node);
-					new_node.setNextLink(this.head);
-					new_node.setPrevLink(prev_node);
-					this.number_of_elements++;
+			else { //В середину
+				Node node_before_new = getNode(new_element_index-1,this.head);
+				Node node_after_new=node_before_new.getNextLink();
+				new_node.setNextLink(node_after_new);
+				new_node.setPrevLink(node_before_new);
+				node_before_new.setNextLink(new_node);
+				node_after_new.setPrevLink(new_node);
+				this.number_of_elements++;
 				}
-				else { //В середину
-					Node node_before_new = getNode(new_element_index-1,this.head);
-					Node node_after_new=node_before_new.getNextLink();
-					new_node.setNextLink(node_after_new);
-					new_node.setPrevLink(node_before_new);
-					node_before_new.setNextLink(new_node);
-					node_after_new.setPrevLink(new_node);
-					this.number_of_elements++;
-				}
-					
+				
 			}
-		}
 	}
 
 	// метод удаленя узла по номеру в списке
 	private void dellNode(int index_of_dell_element){
-		if(index_of_dell_element < 0 || index_of_dell_element > this.number_of_elements-1){
-			System.out.println(" dellElement:index_of_dell_element ");
-			return;
-		}
-
-		else {
-			Node dell_node = getNode(index_of_dell_element,this.head);
-			Node prev_node = dell_node.getPrevLink();
-			Node next_node = dell_node.getNextLink();
-			prev_node.setNextLink(next_node);
-			next_node.setPrevLink(prev_node);
-			this.number_of_elements--;
-		}
+		Node dell_node = getNode(index_of_dell_element,this.head);
+		Node prev_node = dell_node.getPrevLink();
+		Node next_node = dell_node.getNextLink();
+		prev_node.setNextLink(next_node);
+		next_node.setPrevLink(prev_node);
+		this.number_of_elements--;
 	}
 
 	public String toString(){
@@ -333,6 +332,4 @@ public class OfficeBuilding{
 		sb.append(")");
 	return sb.toString();
 	}
-
-
 }

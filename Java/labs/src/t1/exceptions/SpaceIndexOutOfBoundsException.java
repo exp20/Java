@@ -1,9 +1,9 @@
 //Ошибка выхода за границы номеров помещений
 package t1.exceptions;
 public class SpaceIndexOutOfBoundsException extends IndexOutOfBoundsException{
-	SpaceIndexOutOfBoundsException(){}
+	public SpaceIndexOutOfBoundsException(){}
 
-	SpaceIndexOutOfBoundsException(String str){
+	public SpaceIndexOutOfBoundsException(String str){
 		super(str);
 	}
 }

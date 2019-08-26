@@ -1,5 +1,7 @@
 package t1.buildings.office;
+
 import t1.buildings.office.*;
+import t1.exceptions.*;
 /**
 	работа класса основана на односвязном циклическом списке офисов с выделенной головой.
 	*/
@@ -60,28 +62,18 @@ private class ListElement{
 
 	// метод полчение элемента по его номеру в списке
 	//организуем рекурсию
-	private ListElement getElement(int number_of_element, ListElement next_elem){
-		if (this.number_of_elements<=number_of_element ||  number_of_element < 0){
-			System.out.println("getElement: wrong number_of_element ");
-			return null;
-		}
-
-		else{	
+	private ListElement getElement(int number_of_element, ListElement next_elem){	
 				if(number_of_element == 0 ){ //хвост рекурсии, при этом next_elem указывает на head
 					return next_elem.getNextLink();
 				}
 				else{
 					return getElement(--number_of_element, next_elem.getNextLink());
 				}
-			}	
+				
 	}
 	//метод добавления узла в список по номеру.
 	private void addElement(int new_element_index, ListElement new_element){
-		if (this.number_of_elements < new_element_index){
-			System.out.println(" addElement: wrong new_element_index ");
-			return;
-		}
-		else { //вставка в начало при пустом списке
+		//вставка в начало при пустом списке
 			if (this.number_of_elements==0 || new_element_index==0){
 				ListElement buff = new ListElement(new_element.getData());
 				buff.setNextLink(this.head.getNextLink());
@@ -106,17 +98,11 @@ private class ListElement{
 				}
 					
 			}
-		}
 	}
 
 	// метод удаленя узла по номеру в списке
 	private void dellElement(int index_of_dell_element){
-		if(index_of_dell_element < 0 || index_of_dell_element > this.number_of_elements-1){
-			System.out.println(" dellElement:index_of_dell_element ");
-			return;
-		}
-
-		else {
+		
 			if (index_of_dell_element==0){ //удаление из начала
 				this.head.setNextLink(this.head.getNextLink().getNextLink());
 				this.number_of_elements--;
@@ -135,7 +121,6 @@ private class ListElement{
 					this.number_of_elements--;
 				}
 			}
-		}
 	}
 
 	public int getNumberOfOffices(){
@@ -199,22 +184,33 @@ private class ListElement{
 
 	//метод получения офиса по его номеру на этаже.
 	public Office getOfficeByNumber(int number){
+		if (this.number_of_elements <= number ||  number < 0){
+			throw new SpaceIndexOutOfBoundsException();
+			}
+		else
+			{
 		return this.getElement(number, this.head).getData();
+			}
 	}
 
 	//метод изменения офиса по его номеру на этаже и ссылке на обновленный офис.
 	public void setOffice(int number, Office new_office){
-		Office buffer = getOfficeByNumber(number);
-		buffer.setNumberOfRooms(new_office.getNumberOfRooms());
-		buffer.setSquare(new_office.getSquare());
+		if (this.number_of_elements <= number || number < 0){
+			throw new SpaceIndexOutOfBoundsException();
+			}
+		else
+			{
+			Office buffer = getOfficeByNumber(number);
+			buffer.setNumberOfRooms(new_office.getNumberOfRooms());
+			buffer.setSquare(new_office.getSquare());
+			}
 	}
 
 	//метод добавления нового офиса на этаже по будущему номеру офиса.
 	public void addOfficeToFloor(int new_number, Office new_office){
-		if (new_number>this.number_of_elements|| new_number<0){ //так как пропусков не должно быть
-			System.out.println("Error: addOfficeToFloor (new number > number_of_elements or < 0 )"); 
-			return;
-		}
+		if (new_number > this.number_of_elements|| new_number<0){ //так как пропусков не должно быть
+			throw new SpaceIndexOutOfBoundsException("wrong new index");
+			}
 		else
 		{
 			this.addElement(new_number, new ListElement(new_office));
@@ -223,13 +219,12 @@ private class ListElement{
 
 	//метод удаления офиса по его номеру на этаже.
 	public void dellOffice(int number){
-		if (number>this.number_of_elements|| number<0){ //так как пропусков не должно быть
-			System.out.println("Error: dellOffice (number > number_of_elements or < 0 )"); 
-			return;
-	}
+		if (this.number_of_elements <= number|| number< 0){
+			throw new SpaceIndexOutOfBoundsException();
+			}
 	else{
 		this.dellElement(number);
-	}
+		}
 }
 	//получения самого большого по площади офиса этажа
 	public Office getBestSpace(){

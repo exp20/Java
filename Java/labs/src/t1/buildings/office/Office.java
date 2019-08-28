@@ -1,8 +1,9 @@
 package t1.buildings.office;
 
 import t1.exceptions.*;
+import t1.buildings.interfaces.Space;
 
-public class Office{
+public class Office implements Space{
 	private final int DEFAULT_NUMBER_OF_ROOMS=1;
 	private final double DEFAULT_SQUARE=250;
 

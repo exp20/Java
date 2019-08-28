@@ -3,10 +3,12 @@
 */
 package t1.buildings.office;
 
+import t1.buildings.interfaces.Building;
 import t1.buildings.office.*;
 import t1.exceptions.*;
+import t1.buildings.interfaces.*;
 
-public class OfficeBuilding{
+public class OfficeBuilding implements Building {
 	private Node head = null;
 	private int number_of_elements=0;
 
@@ -14,15 +16,18 @@ public class OfficeBuilding{
 	private class Node{
 		private Node nextElement = null;
 		private Node prevElement = null;
-		private OfficeFloor data = null;
+		private Floor data = null;
 
 		 Node(){}
 
 		 Node( OfficeFloor office_floor){
-			this.data = new OfficeFloor(office_floor.getNumberOfOffices());
-			for(int i=0; i < office_floor.getNumberOfOffices(); i++){
-				this.data.setOffice(i,office_floor.getOfficeByNumber(i));
+			this.data = new OfficeFloor(office_floor.getTotalNumberOfSpaces());
+			for(int i=0; i < office_floor.getTotalNumberOfSpaces(); i++){
+				this.data.setSpace(i,office_floor.getSpace(i));
 			}
+		}
+		Node(Floor floor) {
+			this.data = floor;
 		}
 
 		void setNextLink(Node next_link){
@@ -32,7 +37,7 @@ public class OfficeBuilding{
 			this.prevElement=prev_link;
 		}
 
-		OfficeFloor getData(){
+		Floor getData(){
 			return this.data;
 		}
 		Node getNextLink(){
@@ -42,37 +47,37 @@ public class OfficeBuilding{
 			return this.prevElement;
 		}
 
-		void setData(OfficeFloor new_data){
+		void setData(Floor new_data){
 			this.data = new_data;
 		}
 	}
 
 
 	//Конструктор может принимать количество этажей и массив количества офисов по этажам.
-	public OfficeBuilding (int number_of_floors, int[] numb_of_offices){
+	public OfficeBuilding (int number_of_floors, int...numb_of_offices){
 		this.head = new Node();
 		for (int i =0; i < number_of_floors; i++){
 			this.addNode(i, new Node(new OfficeFloor(numb_of_offices[i])));
 		}
 	}
-	//Конструктор может принимать массив этажей офисного здания.
-	public OfficeBuilding (OfficeFloor[] office_floor_array){
+	//Конструктор может принимать массив этажей
+	public OfficeBuilding (Floor...floors_array){
 		this.head = new Node();
-		for(int i=0; i < office_floor_array.length; i++){
-			this.addNode(i,new Node (new OfficeFloor(office_floor_array[i].getOfficesArray())));
+		for(int i=0; i < floors_array.length; i++){
+			this.addNode(i,new Node (floors_array[i]));
 		}
 	}
 
 	//метод получения общего количества этажей здания.
-	public int getNumberOfFloors(){
+	public int getTotalNumberOfFloors(){
 		return this.number_of_elements;
 	}
 
-	public int getTotalNumberOfOffices(){
+	public int getTotalNumberOfSpaces(){
 		int tot_numb = 0;
 		Node buff = this.head.getNextLink();
 		do{
-			tot_numb+=buff.getData().getNumberOfOffices();
+			tot_numb+=buff.getData().getTotalNumberOfSpaces();
 			buff=buff.getNextLink();
 		}
 		while(buff!=this.head);
@@ -104,21 +109,21 @@ public class OfficeBuilding{
 	}
 
 	//метод получения массива этажей офисного здания
-	public OfficeFloor[] getOfficeFloorsArray(){
-		OfficeFloor[] off_array = new OfficeFloor[this.number_of_elements];
+	public Floor[] getFloorsArray(){
+		Floor[] floors_array = new Floor[this.number_of_elements];
 		Node buff = this.head.getNextLink();
 		int i =0;
 		do{
-			off_array[i]=buff.getData();
+			floors_array[i]=buff.getData();
 			buff=buff.getNextLink();
 			i++;
 		}
 		while(buff!=this.head);
-		return off_array;
+		return floors_array;
 	}
 
 	//метод получения объекта этажа, по его номеру в здании.
-	public OfficeFloor getOfficeFloor(int number){
+	public Floor getFloor(int number){
 		if (this.number_of_elements <= number || number < 0){
 			throw new FloorIndexOutOfBoundsException();
 		}
@@ -129,43 +134,42 @@ public class OfficeBuilding{
 	}
 
 	//метод изменения этажа по его номеру в здании и ссылке на обновленный этаж
-	public void setOfficeFloor(int index, OfficeFloor new_office_floor){
+	public void setFloor(int index, Floor new_floor){
 		if(index < 0 || index > this.number_of_elements-1){
 			throw new FloorIndexOutOfBoundsException();
 		}
-		else{
-		Office[] array_off = new_office_floor.getOfficesArray();
+		else{;
 		Node ch_floor= getNode(index, this.head);
-		ch_floor.setData(new OfficeFloor(array_off));
+		ch_floor.setData(new_floor);
 		}
 	}
 
 	//метод получения объекта офиса по его номеру в офисном здании
-	public Office getOfficeByNumber(int number_of_office){
-		if (this.getTotalNumberOfOffices() <= number_of_office || number_of_office < 0){
+	public Space getSpace(int number){
+		if (this.getTotalNumberOfSpaces() <= number || number < 0){
 			throw new SpaceIndexOutOfBoundsException();
 		}
 		else{
-		int[] off_indexes=this.getOfficeIndex(number_of_office);
-		return this.getOfficeFloor(off_indexes[0]).getOfficeByNumber(off_indexes[1]);
+		int[] off_indexes=this.getOfficeIndex(number);
+		return this.getFloor(off_indexes[0]).getSpace(off_indexes[1]);
 		}
 	}
 
 	//метод изменения объекта офиса по его номеру в доме и ссылке типа офиса.
-	public void setOffice(int number_of_office, Office new_office){
-		if (this.getTotalNumberOfOffices() <= number_of_office || number_of_office < 0){
+	public void setSpace(int number_of_space, Space new_space){
+		if (this.getTotalNumberOfSpaces() <= number_of_space || number_of_space < 0){
 			throw new SpaceIndexOutOfBoundsException();
 		}
 		else{
-			Office set_office = this.getOfficeByNumber(number_of_office);
-			set_office.setNumberOfRooms(new_office.getNumberOfRooms());
-			set_office.setSquare(new_office.getSquare());
+			Space set_space = this.getSpace(number_of_space);
+			set_space.setNumberOfRooms(new_space.getNumberOfRooms());
+			set_space.setSquare(new_space.getSquare());
 		}
 	}
 
 	//метод добавления офиса в здание по номеру офиса в здании и ссылке на офис
-	public void addOffice(int new_index, Office new_office){
-		if (new_index > this.getTotalNumberOfOffices() || new_index < 0){
+	public void addSpace(int new_index, Space new_space){
+		if (new_index > this.getTotalNumberOfSpaces() || new_index < 0){
 			throw new SpaceIndexOutOfBoundsException("wrong new index");
 		}
 		else
@@ -174,13 +178,13 @@ public class OfficeBuilding{
 			Node floor_buff = this.head.getNextLink();
 			int buff_numb_floor_offices =0;
 			for (int i =0; i < this.number_of_elements; i++){
-				buff_numb_floor_offices = floor_buff.getData().getNumberOfOffices();
+				buff_numb_floor_offices = floor_buff.getData().getTotalNumberOfSpaces();
 				if (buff_index<=buff_numb_floor_offices){
-				this.getOfficeFloor(i).addOfficeToFloor(buff_index, new_office);
+				this.getFloor(i).addSpace(buff_index, new_space);
 				return;
 			}
 			else{
-				buff_index-=floor_buff.getData().getNumberOfOffices();
+				buff_index-=floor_buff.getData().getTotalNumberOfSpaces();
 				floor_buff=floor_buff.getNextLink();
 			}
 			}
@@ -189,15 +193,15 @@ public class OfficeBuilding{
 	}
 
 	//метод получения самого большого по площади офиса
-	public Office getBestSpace(){
+	public Space getBestSpace(){
 		if (this.number_of_elements==0){
 			return null;
 		}
 		if (this.number_of_elements ==1){
-			return this.getOfficeFloor(0).getBestSpace();
+			return this.getFloor(0).getBestSpace();
 
 		}
-		Office buff_best_space=this.head.getNextLink().getData().getBestSpace();
+		Space buff_best_space=this.head.getNextLink().getData().getBestSpace();
 		Node buff_node=this.head.getNextLink();
 		double best_space = buff_best_space.getSquare();
 		do{
@@ -212,42 +216,42 @@ public class OfficeBuilding{
 		}
 
 	//метод получения отсортированного по убыванию площадей массива офисов.
-	public Office[] getSortArray(){
-		Office[] sort_office_array= new Office[this.getTotalNumberOfOffices()];
+	public Space[] getSortSpacesArray(){
+		Space[] sort_spaces_array= new Space[this.getTotalNumberOfSpaces()];
 		int k = 0;
-		Office [] buff_arr;
+		Space [] buff_arr;
 		for(int i=0; i<this.number_of_elements; i++){
-			buff_arr = this.getOfficeFloor(i).getOfficesArray();
+			buff_arr = this.getFloor(i).getSpacesArray();
 			for (int j=0; j < buff_arr.length; j++){
-				sort_office_array[k]=new Office(buff_arr[j].getNumberOfRooms(), buff_arr[j].getSquare());
+				sort_spaces_array[k]= buff_arr[j];
 				k+=1;
 			}
 		}	
 		
 		//сама сортировка
 
-		for(int i=0; i < sort_office_array.length; i++){
+		for(int i=0; i < sort_spaces_array.length; i++){
 
-			for (int j = i+1; j< sort_office_array.length; j++){
-				if (sort_office_array[i].getSquare()<sort_office_array[j].getSquare()){
-					Office buff = sort_office_array[i];
-					sort_office_array[i]=sort_office_array[j];
-					sort_office_array[j]=buff;
+			for (int j = i+1; j< sort_spaces_array.length; j++){
+				if (sort_spaces_array[i].getSquare()<sort_spaces_array[j].getSquare()){
+					Space buff = sort_spaces_array[i];
+					sort_spaces_array[i]=sort_spaces_array[j];
+					sort_spaces_array[j]=buff;
 				}
 			}
 		}
 
-		return sort_office_array;
+		return sort_spaces_array;
 	}
 
 	//метод удаления офиса по его номеру в здании.
-	public void dellOffice(int dell_numb){
-		if (this.getTotalNumberOfOffices() <= dell_numb || dell_numb < 0){
+	public void dellSpace(int dell_numb){
+		if (this.getTotalNumberOfSpaces() <= dell_numb || dell_numb < 0){
 			throw new SpaceIndexOutOfBoundsException();
 		}
 		else{
 			int[] office_dell_index=this.getOfficeIndex(dell_numb);
-			this.getOfficeFloor(office_dell_index[0]).dellOffice(office_dell_index[1]);
+			this.getFloor(office_dell_index[0]).dellSpace(office_dell_index[1]);
 		}
 	} 
 
@@ -257,12 +261,12 @@ public class OfficeBuilding{
 			Node floor_buff = this.head.getNextLink();
 			int buff_numb_floor_offices =0;
 			for (int i =0; i < this.number_of_elements; i++){
-				buff_numb_floor_offices = floor_buff.getData().getNumberOfOffices();
+				buff_numb_floor_offices = floor_buff.getData().getTotalNumberOfSpaces();
 				if (buff_index<=buff_numb_floor_offices-1){
 				return new int[]{i,buff_index};
 			}
 			else{
-				buff_index-=floor_buff.getData().getNumberOfOffices();
+				buff_index-=floor_buff.getData().getTotalNumberOfSpaces();
 				floor_buff=floor_buff.getNextLink();
 				}
 			}
@@ -322,7 +326,7 @@ public class OfficeBuilding{
 	}
 
 	public String toString(){
-		StringBuilder sb = new StringBuilder("OfficeBuilding ("+this.getNumberOfFloors());
+		StringBuilder sb = new StringBuilder("OfficeBuilding ("+this.getTotalNumberOfFloors());
 		Node buff = this.head.getNextLink();
 		do{
 			sb.append(", "+buff.getData());

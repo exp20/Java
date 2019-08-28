@@ -1,7 +1,16 @@
 
-import java.util.Arrays;
-import t1.buildings.dwelling.*;
-import t1.buildings.office.*;
+
+//import t1.buildings.dwelling.*;
+import t1.buildings.dwelling.Dwelling;
+import t1.buildings.dwelling.DwellingFloor;
+import t1.buildings.dwelling.Flat;
+import t1.buildings.interfaces.Building;
+import t1.buildings.interfaces.Floor;
+import t1.buildings.interfaces.Space;
+import t1.buildings.office.Office;
+import t1.buildings.office.OfficeBuilding;
+import t1.buildings.office.OfficeFloor;
+//import t1.buildings.office.*;
 import static java.lang.System.out;
 
 public class Test{
@@ -9,7 +18,7 @@ public class Test{
 public static void main(String[] arg){
 	
 	//тесты классов Flat, DwellingFloor, Dwelling;
-	
+	/*
 	Flat f1 = new Flat();
 	System.out.println(f1);
 	f1 = new Flat(22,55);
@@ -46,7 +55,7 @@ public static void main(String[] arg){
 	dwell1 = new Dwelling(new DwellingFloor[]{floor1, floor2});
 	System.out.println(dwell1);
 
-	System.out.println("getNumbersOfFloor = " + dwell1.getNumbersOfFloor()+ " getTotalNumberOfFlats = "+ dwell1.getTotalNumberOfFlats()+ " getTotalSquare = " +dwell1.getTotalSquare() + " getTotalNumbersOfRooms = "+ dwell1.getTotalNumbersOfRooms());
+	System.out.println("getNumbersOfFloor = " + dwell1.getNumberOfFloors()+ " getTotalNumberOfFlats = "+ dwell1.getTotalNumberOfFlats()+ " getTotalSquare = " +dwell1.getTotalSquare() + " getTotalNumbersOfRooms = "+ dwell1.getTotalNumbersOfRooms());
 
 	dwell1.getDwellingFloorsArr();
 
@@ -162,6 +171,53 @@ public static void main(String[] arg){
 		out.println(of.getSquare());
 	}
 	//of_build2.dellOffice(-1);
+
+	 */
+	// Тесты посл едобавления интерфейсов
+	Space[] space_array1 = new Space[]{new Office(1,1), new Flat(2,2)};
+	for(Space s: space_array1){
+		out.println(s);
 	}
+	OfficeFloor of_floor = new OfficeFloor(2);
+	of_floor.addSpace(2,new Flat(1));
+	out.println(of_floor);
+
+	DwellingFloor dw_floor = new DwellingFloor(new Space[]{new Flat(2,2), new Office(1,1)});
+	dw_floor.addSpace(2,new Office(3,3));
+	out.println(dw_floor);
+
+	OfficeFloor dw_floor2 = new OfficeFloor(new Space[]{new Office(71,71), new Flat(72,72)});
+	Building bulding1 = new Dwelling(new Floor[]{dw_floor, dw_floor2});
+	out.println(bulding1);
+	Space[] sp_arr=bulding1.getSortSpacesArray();
+	for(Space s : sp_arr){
+		out.println(s);
+	}
+
+	OfficeFloor officeFloor3 = new OfficeFloor(new Office[]{new Office(1,1)});
+	OfficeFloor officeFloor4 = new OfficeFloor(new Flat[]{new Flat(1,1)});
+	out.println(officeFloor3);
+	out.println(officeFloor4);
+/*
+	Building building2 = new Dwelling(new Floor[]{ officeFloor3, officeFloor4, dw_floor, dw_floor2});
+	out.println(building2);
+	out.println("getBestSpace = "+building2.getBestSpace()+" getTotalNumberOfSpaces "+ building2.getTotalNumberOfSpaces()+ " getTotalNumberOfRooms "+building2.getTotalNumberOfRooms()
+	+ " getSpace(0) " + building2.getSpace(0)+ "getTotalNumberOfFloors "+ building2.getTotalNumberOfFloors() + " getTotalSquare "+ building2.getTotalSquare());
+
+	building2.addSpace(0,new Flat(99,99));
+	building2.dellSpace(building2.getTotalNumberOfSpaces()-1);
+	out.println(building2);
+	*/
+
+	Building office_build1 = new OfficeBuilding(new Floor[]{ officeFloor3, officeFloor4, dw_floor, dw_floor2});
+	out.println(office_build1);
+	out.println("getBestSpace = "+office_build1.getBestSpace()+" getTotalNumberOfSpaces "+ office_build1.getTotalNumberOfSpaces()+ " getTotalNumberOfRooms "+office_build1.getTotalNumberOfRooms()
+			+ " getSpace(0) " + office_build1.getSpace(0)+ "getTotalNumberOfFloors "+ office_build1.getTotalNumberOfFloors() + " getTotalSquare "+ office_build1.getTotalSquare());
+
+	office_build1.addSpace(0,new Flat(99,99));
+	office_build1.dellSpace(office_build1.getTotalNumberOfSpaces()-1);
+	out.println(office_build1);
+
+}
 
 }

@@ -2,10 +2,11 @@ package t1.buildings.office;
 
 import t1.buildings.office.*;
 import t1.exceptions.*;
+import t1.buildings.interfaces.*;
 /**
 	работа класса основана на односвязном циклическом списке офисов с выделенной головой.
 	*/
-public class OfficeFloor{
+public class OfficeFloor implements Floor{
 
 	private ListElement head=null;
 	private int number_of_elements=0;
@@ -13,19 +14,19 @@ public class OfficeFloor{
 	//элемент списка
 private class ListElement{
 	private ListElement next_element=null;
-	private Office data=null;
+	private Space data=null;
 
 	ListElement(){}
 		
-	ListElement (Office off){
-		this.data = new Office(off.getNumberOfRooms(), off.getSquare());
+	ListElement (Space off){
+		this.data = off;
 		}
 
-	Office getData(){
+	Space getData(){
 		return this.data;
 		}
 
-	void setData(Office new_data){
+	void setData(Space new_data){
 		this.data.setNumberOfRooms(new_data.getNumberOfRooms());
 		this.data.setSquare(new_data.getSquare());
 		}
@@ -48,16 +49,13 @@ private class ListElement{
 		}
 	}
 	
-	//принимает массив офисов
-	public OfficeFloor(Office[] offices_array){
-		this(offices_array.length);
-		//для ооптимального заполнения без метода getElement()
-		ListElement buffer=this.head;
-		for(int i=0; i < offices_array.length; i++){
-			buffer.getNextLink().setData(offices_array[i]);
-			buffer=buffer.getNextLink();
+	//принимает массив
+	public OfficeFloor(Space...spaces_array){
+		this.head = new ListElement();
+		this.head.setNextLink(this.head);
+		for (int i=0; i < spaces_array.length; i++){
+			this.addElement(i, new ListElement(spaces_array[i]));
 		}
-		this.number_of_elements=offices_array.length;
 	}
 
 	// метод полчение элемента по его номеру в списке
@@ -123,7 +121,7 @@ private class ListElement{
 			}
 	}
 
-	public int getNumberOfOffices(){
+	public int getTotalNumberOfSpaces(){
 		return this.number_of_elements;
 	}
 	//метод получения общей площади помещений этажа.
@@ -163,13 +161,13 @@ private class ListElement{
 		}
 	}
 	// метод получения массива офисов этажа.
-	public Office[] getOfficesArray(){
+	public Space[] getSpacesArray(){
 		if(this.number_of_elements==0){
 			System.out.println("getOfficeArray: 0 offices "); 
 			return null;
 		}
 		else{
-			Office[] offices_array = new Office[this.number_of_elements];
+			Space[] offices_array = new Space[this.number_of_elements];
 			int i=0;
 			ListElement buffer=this.head.getNextLink();
 			do{
@@ -183,7 +181,7 @@ private class ListElement{
 	}
 
 	//метод получения офиса по его номеру на этаже.
-	public Office getOfficeByNumber(int number){
+	public Space getSpace(int number){
 		if (this.number_of_elements <= number ||  number < 0){
 			throw new SpaceIndexOutOfBoundsException();
 			}
@@ -194,31 +192,31 @@ private class ListElement{
 	}
 
 	//метод изменения офиса по его номеру на этаже и ссылке на обновленный офис.
-	public void setOffice(int number, Office new_office){
+	public void setSpace(int number, Space new_office){
 		if (this.number_of_elements <= number || number < 0){
 			throw new SpaceIndexOutOfBoundsException();
 			}
 		else
 			{
-			Office buffer = getOfficeByNumber(number);
+			Space buffer = getSpace(number);
 			buffer.setNumberOfRooms(new_office.getNumberOfRooms());
 			buffer.setSquare(new_office.getSquare());
 			}
 	}
 
 	//метод добавления нового офиса на этаже по будущему номеру офиса.
-	public void addOfficeToFloor(int new_number, Office new_office){
+	public void addSpace(int new_number, Space new_space){
 		if (new_number > this.number_of_elements|| new_number<0){ //так как пропусков не должно быть
 			throw new SpaceIndexOutOfBoundsException("wrong new index");
 			}
 		else
 		{
-			this.addElement(new_number, new ListElement(new_office));
+			this.addElement(new_number, new ListElement(new_space));
 		}
 	}
 
 	//метод удаления офиса по его номеру на этаже.
-	public void dellOffice(int number){
+	public void dellSpace(int number){
 		if (this.number_of_elements <= number|| number< 0){
 			throw new SpaceIndexOutOfBoundsException();
 			}
@@ -227,13 +225,13 @@ private class ListElement{
 		}
 }
 	//получения самого большого по площади офиса этажа
-	public Office getBestSpace(){
+	public Space getBestSpace(){
 		if(this.number_of_elements==0){
 			System.out.println("getBestSpace: 0 offices "); 
 			return null;
 		}
 		ListElement buffer=this.head.getNextLink();
-		Office best_square_office=this.head.getNextLink().getData();
+		Space best_square_office=this.head.getNextLink().getData();
 		do{
 				if(best_square_office.getSquare()<buffer.getData().getSquare()){
 					best_square_office=buffer.getData();

@@ -5,7 +5,9 @@ package t1.buildings.dwelling;
 import t1.exceptions.*;
 import t1.buildings.interfaces.Space;
 
-public class Flat implements Space {
+import java.io.Serializable;
+
+public class Flat implements Space, Serializable {
 	private final int DEF_NUMBERS_OF_ROOMS=2;
 	private final double DEF_SQUARE=50;
 	private int numbers_of_rooms;

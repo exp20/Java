@@ -8,12 +8,14 @@ import t1.buildings.office.*;
 import t1.exceptions.*;
 import t1.buildings.interfaces.*;
 
-public class OfficeBuilding implements Building {
+import java.io.Serializable;
+
+public class OfficeBuilding implements Building, Serializable {
 	private Node head = null;
 	private int number_of_elements=0;
 
 		//элемент циклического сиска двусвязного
-	private class Node{
+	private class Node implements Serializable{
 		private Node nextElement = null;
 		private Node prevElement = null;
 		private Floor data = null;
@@ -176,7 +178,7 @@ public class OfficeBuilding implements Building {
 		{
 			int buff_index = new_index;
 			Node floor_buff = this.head.getNextLink();
-			int buff_numb_floor_offices =0;
+			int buff_numb_floor_offices = 0;
 			for (int i =0; i < this.number_of_elements; i++){
 				buff_numb_floor_offices = floor_buff.getData().getTotalNumberOfSpaces();
 				if (buff_index<=buff_numb_floor_offices){

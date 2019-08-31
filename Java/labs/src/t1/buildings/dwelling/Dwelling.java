@@ -7,7 +7,9 @@ import t1.exceptions.*;
 import t1.buildings.*;
 import t1.buildings.interfaces.*;
 
-public class Dwelling implements Building{
+import java.io.Serializable;
+
+public class Dwelling implements Building, Serializable {
 	private Floor[] floors_array;
 
 	public Dwelling(int numbers_of_floors, int...arr_numbers_of_flats){

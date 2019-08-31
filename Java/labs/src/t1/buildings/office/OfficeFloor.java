@@ -3,16 +3,19 @@ package t1.buildings.office;
 import t1.buildings.office.*;
 import t1.exceptions.*;
 import t1.buildings.interfaces.*;
+
+import java.io.Serializable;
+
 /**
 	работа класса основана на односвязном циклическом списке офисов с выделенной головой.
 	*/
-public class OfficeFloor implements Floor{
+public class OfficeFloor implements Floor, Serializable{
 
 	private ListElement head=null;
 	private int number_of_elements=0;
 
 	//элемент списка
-private class ListElement{
+private class ListElement implements Serializable {
 	private ListElement next_element=null;
 	private Space data=null;
 

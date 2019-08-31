@@ -1,7 +1,7 @@
 // интерфейс описывающий функц этажа
 package t1.buildings.interfaces;
 
-public interface Floor{
+public interface Floor {
 	int getTotalNumberOfSpaces();
 
 	double getTotalSquare();

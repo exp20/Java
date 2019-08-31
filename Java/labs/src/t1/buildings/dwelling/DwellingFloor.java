@@ -6,7 +6,9 @@ import t1.buildings.interfaces.*;
 import t1.exceptions.*;
 import t1.buildings.*;
 
-public class DwellingFloor implements Floor{
+import java.io.Serializable;
+
+public class DwellingFloor implements Floor, Serializable {
 	private Space[] space_array;
 
 	public DwellingFloor(int number_of_flats){
@@ -16,7 +18,7 @@ public class DwellingFloor implements Floor{
 		}
 	}
 
-	public DwellingFloor(Space[] new_space_array){
+	public DwellingFloor(Space... new_space_array){
 		/*
 		this(new_flats_array.length);
 		for (int i=0; i < new_flats_array.length; i++){

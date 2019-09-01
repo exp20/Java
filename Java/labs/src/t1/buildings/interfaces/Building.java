@@ -30,4 +30,10 @@ public interface Building {
     Space getBestSpace();
 
     Space[] getSortSpacesArray();
+
+    boolean equals(Object obj);
+
+    int hashCode();
+
+    Object clone();
 }

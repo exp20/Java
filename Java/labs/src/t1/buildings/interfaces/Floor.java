@@ -19,4 +19,10 @@ public interface Floor {
 	void dellSpace (int dell_index);
 	
 	Space getBestSpace();
+
+	boolean equals (Object obj);
+
+	int hashCode();
+
+	Object clone();
 }

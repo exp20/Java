@@ -11,4 +11,9 @@ public interface Space{
 
 	void setSquare(double new_square);
 
+	boolean equals(Object obj);
+
+	int hashCode();
+
+	Object clone();
 }

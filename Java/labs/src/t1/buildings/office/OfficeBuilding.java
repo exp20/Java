@@ -8,9 +8,9 @@ import t1.buildings.office.*;
 import t1.exceptions.*;
 import t1.buildings.interfaces.*;
 
-import java.io.Serializable;
+import java.io.*;
 
-public class OfficeBuilding implements Building, Serializable {
+public class OfficeBuilding implements Building, Serializable, Cloneable {
 	private Node head = null;
 	private int number_of_elements=0;
 
@@ -338,4 +338,52 @@ public class OfficeBuilding implements Building, Serializable {
 		sb.append(")");
 	return sb.toString();
 	}
+
+	public boolean equals(Object other_object){
+		if(this==other_object) return true;
+		if(other_object==null) return false;
+		if(this.getClass()!=other_object.getClass()){
+			return false;
+		}
+		OfficeBuilding other_office = (OfficeBuilding) other_object;
+		if(this.getTotalNumberOfFloors()!= other_office.getTotalNumberOfFloors()) return false;
+		if(this.getTotalNumberOfSpaces()!=other_office.getTotalNumberOfSpaces()) return false;
+		for(int i = 0; i < this.getTotalNumberOfFloors(); i++){
+			if(!this.getFloor(i).equals(other_office.getFloor(i))){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public int hashCode(){
+		int office_building_marker = 23;
+		int result = this.getTotalNumberOfFloors();
+		for(int i =0; i<this.getTotalNumberOfFloors(); i++){
+			result ^= this.getFloor(i).hashCode();
+		}
+		return office_building_marker*result;
+	}
+
+	public Object clone(){
+		try {
+			ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
+			ObjectOutputStream obj_out_stream = new ObjectOutputStream(byte_out);
+			obj_out_stream.writeObject(this);
+			obj_out_stream.flush();
+			obj_out_stream.close();
+			ByteArrayInputStream byte_in = new ByteArrayInputStream(byte_out.toByteArray());
+			ObjectInputStream obj_in = new ObjectInputStream(byte_in);
+			OfficeBuilding clone = (OfficeBuilding) obj_in.readObject();
+			obj_in.close();
+			return clone;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

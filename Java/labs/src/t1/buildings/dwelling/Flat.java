@@ -6,8 +6,9 @@ import t1.exceptions.*;
 import t1.buildings.interfaces.Space;
 
 import java.io.Serializable;
+import java.util.function.LongToIntFunction;
 
-public class Flat implements Space, Serializable {
+public class Flat implements Space, Serializable, Cloneable {
 	private final int DEF_NUMBERS_OF_ROOMS=2;
 	private final double DEF_SQUARE=50;
 	private int numbers_of_rooms;
@@ -69,5 +70,26 @@ public class Flat implements Space, Serializable {
 		StringBuilder sb = new StringBuilder("Flat");
 		sb.append(" ("+this.numbers_of_rooms+", "+this.square+")");
 		return sb.toString();
+	}
+
+	public boolean equals(Object other_object){
+		if(this==other_object) return true;
+		if(other_object==null) return false;
+		if(this.getClass()!=other_object.getClass()) return false;
+		Flat other_flat = (Flat) other_object;
+		return this.square==other_flat.getSquare() && this.numbers_of_rooms==other_flat.getNumberOfRooms();
+	}
+
+	public int hashCode(){
+		int flat_marler = 3;
+		long b0 = Double.doubleToLongBits(this.square);
+		int b1=(int)(b0 >>> 32);
+	    b0 = (b0 << 32);
+	    int b00 = (int)(b0 >>> 32);
+		return flat_marler*b1^b00^this.numbers_of_rooms;
+	}
+
+	public Object clone(){
+		return new Flat(this.numbers_of_rooms,this.square);
 	}
 }

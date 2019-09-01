@@ -1,5 +1,6 @@
 package t1.buildings.office;
 
+import t1.buildings.dwelling.Flat;
 import t1.exceptions.*;
 import t1.buildings.interfaces.Space;
 
@@ -78,5 +79,30 @@ public class Office implements Space, Serializable {
 	public String toString(){
 		return "Office ("+this.number_of_rooms+", "+this.square+")";
 	}
-	
+
+	public boolean equals(Object object){
+		if (this == object) return true; // если передали туже самую ссылку
+		if(object == null) return false;
+		if (object.getClass() != this.getClass()){
+			return false;
+		}
+		Flat other_flat = (Flat) object;
+		return this.square == other_flat.getSquare()
+				&& this.number_of_rooms == other_flat.getNumberOfRooms();
+
+	}
+
+	public int hashCode(){
+		int office_marker=7;
+		long b0 = Double.doubleToLongBits(this.square);
+		int b1=(int)(b0 >>> 32);
+		b0 = (b0 << 32);
+		int b00 = (int)(b0 >>> 32);
+		return office_marker*b1^b00^this.number_of_rooms;
+	}
+
+	public Object clone(){
+		return new Office(this.number_of_rooms,this.square);
+	}
+
 }

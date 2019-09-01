@@ -9,7 +9,7 @@ import t1.buildings.interfaces.*;
 
 import java.io.Serializable;
 
-public class Dwelling implements Building, Serializable {
+public class Dwelling implements Building, Serializable, Cloneable {
 	private Floor[] floors_array;
 
 	public Dwelling(int numbers_of_floors, int...arr_numbers_of_flats){
@@ -184,6 +184,36 @@ public class Dwelling implements Building, Serializable {
 		}
 		sb.append(" )");
 		return sb.toString();
+	}
+
+	public boolean equals(Object other_object){
+		if(this == other_object) return true;
+		if(other_object == null) return false;
+		if(this.getClass()!=other_object.getClass()) return false;
+		Dwelling other_dwelling = (Dwelling) other_object;
+		if(this.getTotalNumberOfFloors()!=other_dwelling.getTotalNumberOfFloors()) return false;
+		if(this.getTotalNumberOfSpaces()!= other_dwelling.getTotalNumberOfSpaces()) return false;
+		for(int i=0; i < this.getTotalNumberOfFloors(); i++){
+			if(!this.getFloor(i).equals(other_dwelling.getFloor(i))) return false;
+		}
+		return true;
+	}
+
+	public int hashCode(){
+		int dwelling_marker = 27;
+		int result = this.getTotalNumberOfFloors();
+		for(int i=0; i < this.getTotalNumberOfFloors(); i++){
+			result ^= this.floors_array[i].hashCode();
+		}
+		return dwelling_marker*result;
+	}
+
+	public Object clone(){
+		Floor[] array = new Floor[this.getTotalNumberOfFloors()];
+		for(int i = 0; i < array.length; i++){
+			array[i] = (Floor) this.floors_array[i].clone();
+		}
+		return new Dwelling(array);
 	}
 
 }

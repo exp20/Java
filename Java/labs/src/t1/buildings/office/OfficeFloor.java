@@ -4,44 +4,72 @@ import t1.buildings.office.*;
 import t1.exceptions.*;
 import t1.buildings.interfaces.*;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.List;
 
 /**
 	работа класса основана на односвязном циклическом списке офисов с выделенной головой.
 	*/
-public class OfficeFloor implements Floor, Serializable{
+public class OfficeFloor implements Floor, Serializable, Cloneable{
 
 	private ListElement head=null;
 	private int number_of_elements=0;
 
 	//элемент списка
-private class ListElement implements Serializable {
-	private ListElement next_element=null;
-	private Space data=null;
+	private class ListElement implements Serializable, Cloneable {
+		private ListElement next_element=null;
+		private Space data=null;
 
-	ListElement(){}
+		ListElement(){}
 		
-	ListElement (Space off){
+		ListElement (Space off){
 		this.data = off;
 		}
 
-	Space getData(){
+		Space getData(){
 		return this.data;
 		}
 
-	void setData(Space new_data){
-		this.data.setNumberOfRooms(new_data.getNumberOfRooms());
-		this.data.setSquare(new_data.getSquare());
-		}
+		void setData(Space new_data){
+			this.data.setNumberOfRooms(new_data.getNumberOfRooms());
+			this.data.setSquare(new_data.getSquare());
+			}
 
-	ListElement getNextLink(){
+		ListElement getNextLink(){
 		return this.next_element;
 		}
 
-	void setNextLink(ListElement next_elem){
-		this.next_element=next_elem;
+		void setNextLink(ListElement next_elem) {
+			this.next_element = next_elem;
+			}
+			/*
+		public Object clone(){
+			if(this.next_element == null || this.data == null){
+				ListElement clone = new ListElement();
+				if(this.next_element == null && this.data == null){
+					return clone;
+				}
+				if(this.next_element == null){
+					clone.setData((Space) this.data.clone());
+					return clone;
+				}
+				if(this.data==null){
+					System.out.println("Warnings in clone ListElement");
+					clone.setNextLink((ListElement) this.next_element.clone());
+					return clone;
+				}
+				return clone;
+			}
+			else{
+				ListElement clone = new ListElement();
+				clone.setNextLink((ListElement) this.next_element.clone());
+				clone.setData((Space) this.data.clone());
+				return clone;
+			}
 		}
+		*/
 	}
+
 
 	//принимает кол-во оффисов
 	public OfficeFloor(int number_of_offices){
@@ -259,6 +287,60 @@ private class ListElement implements Serializable {
 			return sb.toString();
 	}
 		return sb.toString();
+	}
+
+	public boolean equals(Object other_object){
+		if(this == other_object){
+			return true;
+		}
+		if (other_object == null){
+			return false;
+		}
+		if(this.getClass() != other_object.getClass()){
+			return false;
+		}
+		OfficeFloor other_officeFloor = (OfficeFloor) other_object;
+		if (this.getTotalNumberOfSpaces()!= other_officeFloor.getTotalNumberOfSpaces()){
+			return false;
+		}
+		Space[] this_array = this.getSpacesArray();
+		Space[] other_array = this.getSpacesArray();
+		for(int i=0; i < this_array.length; i++){
+			if(!this_array[i].equals(other_array[i])){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public int hashCode(){
+	int office_floor_marker = 17;
+	int result = this.getTotalNumberOfSpaces();
+	for(int i = 0; i<this.getTotalNumberOfSpaces(); i++){
+		result = result ^ this.getSpace(i).hashCode();
+	}
+	return office_floor_marker*result;
+	}
+
+	public Object clone(){
+		try {
+			ByteArrayOutputStream byte_out = new ByteArrayOutputStream();
+			ObjectOutputStream obj_out_stream = new ObjectOutputStream(byte_out);
+			obj_out_stream.writeObject(this);
+			obj_out_stream.flush();
+			obj_out_stream.close();
+			ByteArrayInputStream byte_in = new ByteArrayInputStream(byte_out.toByteArray());
+			ObjectInputStream obj_in = new ObjectInputStream(byte_in);
+			OfficeBuilding clone = (OfficeBuilding) obj_in.readObject();
+			obj_in.close();
+			return clone;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }	

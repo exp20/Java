@@ -5,7 +5,9 @@ import t1.exceptions.*;
 import t1.buildings.interfaces.*;
 
 import java.io.*;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
 	работа класса основана на односвязном циклическом списке офисов с выделенной головой.
@@ -341,6 +343,31 @@ public class OfficeFloor implements Floor, Serializable, Cloneable{
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Iterator<Space> iterator() {
+		return new Iterator<Space>() {
+			int count = 0;
+			ListElement cursor = head;
+			@Override
+			public boolean hasNext() {
+				if (count < number_of_elements) return true;
+				else return false;
+			}
+
+			@Override
+			public Space next() {
+				if (count >= number_of_elements) throw new NoSuchElementException();
+				if (!hasNext()) throw new NoSuchElementException();
+				else{
+					count++;
+					cursor=cursor.getNextLink();
+					return cursor.getData();
+				}
+			}
+
+		};
 	}
 
 }	

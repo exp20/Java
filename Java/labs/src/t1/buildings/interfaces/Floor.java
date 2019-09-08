@@ -1,7 +1,10 @@
 // интерфейс описывающий функц этажа
 package t1.buildings.interfaces;
 
-public interface Floor {
+import javax.swing.text.html.HTMLDocument;
+import java.util.Iterator;
+
+public interface Floor extends Iterable<Space> {
 	int getTotalNumberOfSpaces();
 
 	double getTotalSquare();
@@ -25,4 +28,5 @@ public interface Floor {
 	int hashCode();
 
 	Object clone();
+
 }

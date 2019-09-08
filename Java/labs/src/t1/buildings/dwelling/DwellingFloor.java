@@ -7,8 +7,10 @@ import t1.exceptions.*;
 import t1.buildings.*;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class DwellingFloor implements Floor, Serializable, Cloneable {
+public class DwellingFloor implements Floor, Serializable, Cloneable, Iterable<Space> {
 	private Space[] space_array;
 
 	public DwellingFloor(int number_of_flats) {
@@ -177,4 +179,27 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
 		return new DwellingFloor(array);
 	}
 
+
+	@Override
+	public Iterator<Space> iterator() {
+		return new Iterator<Space>() {
+			int count = 0;
+
+			@Override
+			public boolean hasNext() {
+				if (count < space_array.length) return true;
+				else return false;
+			}
+
+			@Override
+			public Space next() {
+				if (count >= space_array.length) throw new NoSuchElementException();
+				if (!hasNext()) throw new NoSuchElementException();
+				else{
+					return space_array[count++];
+				}
+			}
+
+		};
+	}
 }

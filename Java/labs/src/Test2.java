@@ -1,14 +1,19 @@
 import t1.buildings.dwelling.Dwelling;
 import t1.buildings.dwelling.DwellingFloor;
 import t1.buildings.dwelling.Flat;
+import t1.buildings.dwelling.hotel.Hotel;
+import t1.buildings.dwelling.hotel.HotelFloor;
 import t1.buildings.interfaces.Building;
 import t1.buildings.interfaces.Floor;
+import t1.buildings.interfaces.Space;
 import t1.buildings.office.Office;
 import t1.buildings.office.OfficeBuilding;
 import t1.buildings.office.OfficeFloor;
 
 public class Test2 {
     public static void main(String... args){
+
+
         Flat flat1 = new Flat(10,2.1);
         Flat flat2 = new Flat(10,2.1);
         Office office1= new Office(10,2.1);
@@ -25,6 +30,26 @@ public class Test2 {
         System.out.printf("\nКлон (хэш = %d)\n"+clone_office_build1,clone_office_build1.hashCode());
         office_build1.getSpace(0).setSquare(777);
         System.out.println(office_build1);
+
+        System.out.println("Проверка методов Object классов Hotel, HotelFloor");
+
+        HotelFloor hotel_floor1 = new HotelFloor(3);
+        hotel_floor1.set_stars(5);
+        Hotel hotel1 = new Hotel(new HotelFloor(flat1,flat2), hotel_floor1);
+
+        System.out.println(hotel1);
+
+        for(Floor floor : dwelling1){
+            for(Space sp : floor){
+                System.out.println(sp);
+            }
+        }
+
+        for(Floor floor : office_build1){
+            for(Space sp : floor){
+                System.out.println(sp);
+            }
+        }
 
     }
 

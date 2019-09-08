@@ -9,12 +9,14 @@ import t1.exceptions.*;
 import t1.buildings.interfaces.*;
 
 import java.io.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class OfficeBuilding implements Building, Serializable, Cloneable {
 	private Node head = null;
 	private int number_of_elements=0;
 
-		//элемент циклического сиска двусвязного
+	//элемент циклического сиска двусвязного
 	private class Node implements Serializable{
 		private Node nextElement = null;
 		private Node prevElement = null;
@@ -384,6 +386,31 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Iterator<Floor> iterator() {
+		return new Iterator<Floor>() {
+			int count = 0;
+			Node cursor = head;
+			@Override
+			public boolean hasNext() {
+				if (count < number_of_elements) return true;
+				else return false;
+			}
+
+			@Override
+			public Floor next() {
+				if (count >= number_of_elements) throw new NoSuchElementException();
+				if (!hasNext()) throw new NoSuchElementException();
+				else{
+					count++;
+					cursor=cursor.getNextLink();
+					return cursor.getData();
+				}
+			}
+
+		};
 	}
 
 }

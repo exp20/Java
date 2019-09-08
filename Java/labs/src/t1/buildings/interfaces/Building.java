@@ -3,7 +3,7 @@ package t1.buildings.interfaces;
 import t1.buildings.interfaces.Space;
 import t1.buildings.interfaces.Floor;
 
-public interface Building {
+public interface Building extends Iterable<Floor> {
 
     int getTotalNumberOfFloors();
 

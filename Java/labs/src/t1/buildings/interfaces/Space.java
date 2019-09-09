@@ -2,7 +2,7 @@
 //соответствetn общей функциональности Flat и Office
 package t1.buildings.interfaces;
 
-public interface Space{
+public interface Space extends Comparable<Space>{
 	int getNumberOfRooms();
 
 	void setNumberOfRooms(int new_number_of_rooms);

@@ -370,4 +370,15 @@ public class OfficeFloor implements Floor, Serializable, Cloneable{
 		};
 	}
 
+	@Override
+	public int compareTo(Floor o) {
+		if(this.getTotalNumberOfSpaces() == o.getTotalNumberOfSpaces()) {
+			return 0;
+		}
+		else if (this.getTotalNumberOfSpaces() < o.getTotalNumberOfSpaces()){
+			return -1;
+		}
+		else return 1;
+	}
+
 }	

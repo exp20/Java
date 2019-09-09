@@ -92,4 +92,12 @@ public class Flat implements Space, Serializable, Cloneable {
 	public Object clone(){
 		return new Flat(this.numbers_of_rooms,this.square);
 	}
+
+	public int compareTo(Space o) {
+		if (this.square == o.getSquare()) {
+			return 0;
+		} else if (this.square > o.getSquare()) {
+			return 1;
+		} else return -1;
+	}
 }

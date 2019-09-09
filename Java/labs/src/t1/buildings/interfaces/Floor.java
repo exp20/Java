@@ -4,7 +4,7 @@ package t1.buildings.interfaces;
 import javax.swing.text.html.HTMLDocument;
 import java.util.Iterator;
 
-public interface Floor extends Iterable<Space> {
+public interface Floor extends Iterable<Space>, Comparable<Floor> {
 	int getTotalNumberOfSpaces();
 
 	double getTotalSquare();

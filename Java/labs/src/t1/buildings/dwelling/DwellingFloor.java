@@ -7,6 +7,7 @@ import t1.exceptions.*;
 import t1.buildings.*;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -201,5 +202,16 @@ public class DwellingFloor implements Floor, Serializable, Cloneable, Iterable<S
 			}
 
 		};
+	}
+
+	@Override
+	public int compareTo(Floor o) {
+		if(this.getTotalNumberOfSpaces() == o.getTotalNumberOfSpaces()) {
+			return 0;
+		}
+		else if (this.getTotalNumberOfSpaces() < o.getTotalNumberOfSpaces()){
+			return -1;
+		}
+		else return 1;
 	}
 }

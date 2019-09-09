@@ -5,14 +5,23 @@ import t1.buildings.dwelling.Dwelling;
 import t1.buildings.dwelling.DwellingFloor;
 import t1.buildings.dwelling.Flat;
 import t1.buildings.interfaces.Building;
+import t1.buildings.interfaces.BuildingFactory;
 import t1.buildings.interfaces.Floor;
 import t1.buildings.interfaces.Space;
+import t1.utilities.factories.DwellingFactory;
+
 import java.io.*;
 import java.util.Scanner;
 
 
 //класс Buildings, работающий со ссылками типа Space, Floor, Building, содержащий статические методы ввода-вывода зданий
 public class Buildings {
+    private static BuildingFactory factory = new DwellingFactory(); //по умолчанию
+
+    public void setBuildingFactory(BuildingFactory new_factory){
+        factory = new_factory;
+    }
+
     //записи данных о здании в байтовый поток
     public static void outputBuilding (Building building, OutputStream out) throws IOException {
         DataOutputStream d_out = new DataOutputStream(new BufferedOutputStream(out));
@@ -35,11 +44,11 @@ public class Buildings {
             int spaces_number = d_in.readInt();
             Space[] buff_space_arr = new Space[spaces_number];
             for(int j =0 ; j < spaces_number; j++){
-                buff_space_arr[j]=new Flat(d_in.readInt(),d_in.readDouble());
+                buff_space_arr[j]= factory.createSpace(d_in.readInt(),d_in.readDouble());
             }
-            floors_array[i]=new DwellingFloor(buff_space_arr);
+            floors_array[i]= factory.createFloor(buff_space_arr);
         }
-        return new Dwelling(floors_array);
+        return factory.createBuilding(floors_array);
     }
 
 
@@ -72,11 +81,11 @@ public class Buildings {
             for(int j =0; j < spaces_array.length; j++){
                 int rooms_numb = (int) tokenizer.nval;
                 double square = (double) tokenizer.nval;
-                spaces_array[j]=new Flat(rooms_numb,square);
+                spaces_array[j]= factory.createSpace(rooms_numb,square);
             }
-            floors_array[i]= new DwellingFloor(spaces_array);
+            floors_array[i]= factory.createFloor(spaces_array);
         }
-    return new Dwelling(floors_array);
+    return factory.createBuilding(floors_array);
     }
 
     //сериализации зданий в байтовый поток
@@ -107,11 +116,44 @@ public class Buildings {
         for(int i=0; i < floors_array.length; i++){
             Space[] spaces_array = new Space[scanner.nextInt()];
             for(int j=0; j < spaces_array.length; j++){
-                spaces_array[j] = new Flat(scanner.nextInt(), scanner.nextDouble());
+                spaces_array[j] = factory.createSpace(scanner.nextInt(), scanner.nextDouble());
             }
-            floors_array[i]=new DwellingFloor(spaces_array);
+            floors_array[i]=factory.createFloor(spaces_array);
         }
-        return new Dwelling(floors_array);
+        return factory.createBuilding(floors_array);
     }
 
+
+    public Space createSpace(double area) {
+        return factory.createSpace(area);
+    }
+
+
+    public Space createSpace(int roomsCount, double area) {
+        return factory.createSpace(roomsCount,area);
+    }
+
+
+    public Floor createFloor(int spacesCount) {
+        return factory.createFloor(spacesCount);
+    }
+
+    public Floor createFloor(Space[] spaces) {
+        return factory.createFloor(spaces);
+    }
+
+
+    public Building createBuilding(int floorsCount, int[] spacesCounts) {
+        return factory.createBuilding(floorsCount, spacesCounts);
+    }
+
+    public Building createBuilding(Floor[] floors) {
+        return factory.createBuilding(floors);
+    }
+
+    public static void sortUp() {//TODO
+         }
+
+        public static void sortDown () { // TODO
+        }
 }

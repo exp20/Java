@@ -157,7 +157,7 @@ public class Buildings {
     public static void sortDown () { // TODO
     }
 
-    public Floor synchronizedFloor (Floor floor){ //возвращающего ссылку на оболочку указанного объекта этажа, безопасную с точки зрения многопоточности.
+    public static Floor synchronizedFloor (Floor floor){ //возвращающего ссылку на оболочку указанного объекта этажа, безопасную с точки зрения многопоточности.
         return new SynhronizedFloor(floor);
     }
 

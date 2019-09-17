@@ -53,13 +53,13 @@ public class DwellingFloor implements Floor, Serializable, Cloneable, Iterable<S
 	}
 
 	public Space[] getSpacesArray() {
-		/**
-		 Flat[] new_flats_array = new Flat[this.flats_array.length];
-		 for(int i=0; i < flats_array.length; i++){
-		 new_flats_array[i]=new Flat(this.flats_array[i].getNumberOfRooms(), this.flats_array[i].getSquare());
+        /*
+		 Flat[] new_flats_array = new Flat[this.space_array.length];
+		 for(int i=0; i < new_flats_array.length; i++){
+		 new_flats_array[i]=new Flat(this.space_array[i].getNumberOfRooms(), this.space_array[i].getSquare());
 		 }
 		 return new_flats_array;
-		 */
+*/
 		return this.space_array;
 	}
 

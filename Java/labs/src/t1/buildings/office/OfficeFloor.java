@@ -120,7 +120,6 @@ public class OfficeFloor implements Floor, Serializable, Cloneable{
 					this.number_of_elements++;
 				}
 				else { //В середину
-					System.out.println("добавляем "+ new_element_index);
 					ListElement elem_before_new = getElement(new_element_index-1,this.head);
 					ListElement newElem = new ListElement(new_element.getData());
 					newElem.setNextLink(elem_before_new.getNextLink());
@@ -196,7 +195,7 @@ public class OfficeFloor implements Floor, Serializable, Cloneable{
 	// метод получения массива офисов этажа.
 	public Space[] getSpacesArray(){
 		if(this.number_of_elements==0){
-			System.out.println("getOfficeArray: 0 offices "); 
+			System.out.println(" WARING getOfficeArray: 0 offices ");
 			return null;
 		}
 		else{

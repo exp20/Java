@@ -179,7 +179,7 @@ public static void main(String[] arg){
 	//of_build2.dellOffice(-1);
 
 	 */
-
+/*
 	// Тесты посл едобавления интерфейсов
 	Space[] space_array1 = new Space[]{new Office(1,1), new Flat(2,2)};
 	for(Space s: space_array1){
@@ -188,7 +188,7 @@ public static void main(String[] arg){
 	OfficeFloor of_floor = new OfficeFloor(2);
 	of_floor.addSpace(2,new Flat(1));
 	out.println(of_floor);
-
+*/
 	DwellingFloor dw_floor = new DwellingFloor(new Space[]{new Flat(2,2), new Office(1,1)});
 	dw_floor.addSpace(2,new Office(3,3));
 	out.println(dw_floor);
@@ -214,6 +214,7 @@ public static void main(String[] arg){
 	+ " getSpace(0) " + building2.getSpace(0)+ "getTotalNumberOfFloors "+ building2.getTotalNumberOfFloors() + " getTotalSquare "+ building2.getTotalSquare());
 
 	building2.addSpace(0,new Flat(99,99));
+	out.println("dell space ");
 	building2.dellSpace(building2.getTotalNumberOfSpaces()-1);
 	out.println(building2);
 
@@ -224,12 +225,15 @@ public static void main(String[] arg){
 			+ " getSpace(0) " + office_build1.getSpace(0)+ "getTotalNumberOfFloors "+ office_build1.getTotalNumberOfFloors() + " getTotalSquare "+ office_build1.getTotalSquare());
 
 	office_build1.addSpace(0,new Flat(99,99));
+	out.println("add SPAcE FFF\n"+office_build1);
+	office_build1.addSpace(office_build1.getTotalNumberOfSpaces()-1, new Flat(100,100));
 	office_build1.dellSpace(office_build1.getTotalNumberOfSpaces()-1);
+	out.println("dell SPAcE FFF\n"+office_build1);
 	out.println("\n"+office_build1);
 
 
 // Тест ввода-вывода
-
+/*
 	try (FileOutputStream fout = new FileOutputStream("..\\out\\building_out_b.bin")){
 		Buildings.outputBuilding(office_build1,fout);
 	} catch (IOException e) {
@@ -247,14 +251,14 @@ public static void main(String[] arg){
 	catch (IOException e) {
 		e.printStackTrace();
 	}
-
-	//try (Writer wr = new OutputStreamWriter(System.out)){
+*/
+	Building building4 = new Dwelling( new Floor[] { new OfficeFloor(new Office()), new DwellingFloor(new Flat()) });
+			//try (Writer wr = new OutputStreamWriter(System.out)){
 	try (Writer wr = new FileWriter("..\\out\\building_out_s.txt")){
-		Buildings.writeBuilding(building1,wr);
+		Buildings.writeBuilding(building4,wr);
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
-	out.println(building1);
 
 
 try (Reader r = new FileReader("..\\out\\building_out_s.txt")){
@@ -295,7 +299,7 @@ try (Reader r = new FileReader("..\\out\\building_out_s.txt")){
 	 e.printStackTrace();
  }
 
- try (FileWriter fl_writer =  new FileWriter("..\\out/building_format.txt")) {
+ try (FileWriter fl_writer =  new FileWriter("..\\out\\building_format.txt")) {
 	 Buildings.writeBuildingFormat(build_ser,fl_writer );
  } catch (IOException e) {
 	 e.printStackTrace();

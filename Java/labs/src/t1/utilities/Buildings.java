@@ -1,6 +1,7 @@
 package t1.utilities;
 
 
+import t1.buildings.SynhronizedFloor;
 import t1.buildings.dwelling.Dwelling;
 import t1.buildings.dwelling.DwellingFloor;
 import t1.buildings.dwelling.Flat;
@@ -152,8 +153,13 @@ public class Buildings {
     }
 
     public static void sortUp() {//TODO
-         }
+    }
+    public static void sortDown () { // TODO
+    }
 
-        public static void sortDown () { // TODO
-        }
+    public Floor synchronizedFloor (Floor floor){ //возвращающего ссылку на оболочку указанного объекта этажа, безопасную с точки зрения многопоточности.
+        return new SynhronizedFloor(floor);
+    }
+
+
 }

@@ -4,6 +4,7 @@ import t1.buildings.dwelling.*;
 import t1.buildings.dwelling.Dwelling;
 import t1.buildings.dwelling.DwellingFloor;
 import t1.buildings.dwelling.Flat;
+import t1.buildings.dwelling.hotel.Hotel;
 import t1.buildings.interfaces.Building;
 import t1.buildings.interfaces.Floor;
 import t1.buildings.interfaces.Space;
@@ -15,6 +16,7 @@ import t1.buildings.office.*;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 import static java.lang.System.out;
 import static java.lang.System.setOut;
@@ -231,18 +233,24 @@ public static void main(String[] arg){
 	out.println("dell SPAcE FFF\n"+office_build1);
 	out.println("\n"+office_build1);
 
+	Hotel hotel1 = new Hotel(new OfficeFloor(4));
+	OfficeBuilding office_build2 = new OfficeBuilding(new Floor[]{new DwellingFloor(3), new OfficeFloor(3)});
+	Dwelling building3 = new Dwelling(new Floor[] {new DwellingFloor(2), new DwellingFloor(2)});
 
 // Тест ввода-вывода
-/*
-	try (FileOutputStream fout = new FileOutputStream("..\\out\\building_out_b.bin")){
-		Buildings.outputBuilding(office_build1,fout);
+	/*
+	try (FileOutputStream fout = new FileOutputStream("../out/building_out_b.bin")){
+		Buildings.outputBuilding(office_build2,fout); //Office
+		Buildings.outputBuilding(building3,fout); //Dwelling
+		Buildings.outputBuilding(hotel1,fout); // Hotel
+
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
 
 
 
-	try( FileInputStream fin = new FileInputStream("..\\out\\building_out_b.bin")){
+	try( FileInputStream fin = new FileInputStream("../out/building_out_b.bin")){
 		Building r_building = Buildings.inputBuilding(fin);
 		out.println( "\n\n"+r_building);
 	} catch (FileNotFoundException e) {
@@ -254,14 +262,19 @@ public static void main(String[] arg){
 */
 	Building building4 = new Dwelling( new Floor[] { new OfficeFloor(new Office()), new DwellingFloor(new Flat()) });
 			//try (Writer wr = new OutputStreamWriter(System.out)){
-	try (Writer wr = new FileWriter("..\\out\\building_out_s.txt")){
-		Buildings.writeBuilding(building4,wr);
+	try (Writer wr = new FileWriter("../out/building_out_s.txt")){
+		Buildings.writeBuilding(office_build2,wr);
+		wr.write("\n");
+		Buildings.writeBuilding(building3,wr);
+		wr.write("\n");
+		Buildings.writeBuilding(hotel1,wr);
+		wr.write("\n");
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
 
-
-try (Reader r = new FileReader("..\\out\\building_out_s.txt")){
+/*
+try (Reader r = new FileReader("../out/building_out_s.txt")){
 	Building read_build = Buildings.readBuilding(r);
 	out.println(read_build);
 } catch (FileNotFoundException e) {
@@ -280,7 +293,7 @@ try (Reader r = new FileReader("..\\out\\building_out_s.txt")){
 			new DwellingFloor(
 					new Office(3,3),
 					new Flat(4,4))});
-	try( FileOutputStream fout  = new FileOutputStream("..\\out\\building.dat")){
+	try( FileOutputStream fout  = new FileOutputStream("../out/building.dat")){
 		Buildings.serializeBuilding(build_ser, fout);
 		out.println("\n Сериализуем\n"+build_ser);
 	} catch (FileNotFoundException e) {
@@ -288,7 +301,7 @@ try (Reader r = new FileReader("..\\out\\building_out_s.txt")){
 	} catch (IOException e) {
 		e.printStackTrace();
 	}
- try (FileInputStream fin = new FileInputStream("..\\out\\building.dat")){
+ try (FileInputStream fin = new FileInputStream("../out/building.dat")){
  		Building deserial_building = Buildings.deserialaizeBuilding(fin);
 	 out.println("\nПолучили после десериализации\n");
 	 out.println(deserial_building);
@@ -299,17 +312,18 @@ try (Reader r = new FileReader("..\\out\\building_out_s.txt")){
 	 e.printStackTrace();
  }
 
- try (FileWriter fl_writer =  new FileWriter("..\\out\\building_format.txt")) {
+ try (FileWriter fl_writer =  new FileWriter("../out/building_format.txt")) {
 	 Buildings.writeBuildingFormat(build_ser,fl_writer );
  } catch (IOException e) {
 	 e.printStackTrace();
  }
-	try (Scanner scanner =  new Scanner(new FileInputStream("..\\out\\building_format.txt"))) {
+	try (Scanner scanner =  new Scanner(new FileInputStream("../out/building_format.txt"))) {
 		out.println(Buildings.readBuilding(build_ser,scanner ));
 	} catch (FileNotFoundException e) {
 		e.printStackTrace();
 	}
 
+*/
 
 }
 }

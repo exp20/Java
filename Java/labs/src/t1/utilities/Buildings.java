@@ -12,6 +12,9 @@ import t1.buildings.interfaces.Space;
 import t1.utilities.factories.DwellingFactory;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.TypeVariable;
 import java.util.Scanner;
 
 
@@ -125,31 +128,87 @@ public class Buildings {
     }
 
 
-    public Space createSpace(double area) {
+    public static Space createSpace(double area) {
         return factory.createSpace(area);
     }
 
+    //Создание объектов с помощью механизма рефликсии
+    public static Space createSpace(Class<? extends Space> spaceClass, double area){ //ограничение типа: в метод может быть переданн Class
+        // который реализует(наследует) интерфейс(класс) Space
+        try {
+            //return spaceClass.getConstructor( double.class ).newInstance( area );
+            Constructor constructor = spaceClass.getConstructor(double.class);
+            return (Space) constructor.newInstance(area);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException| InvocationTargetException e) {
+            throw new IllegalArgumentException();
+        }
+    }
 
-    public Space createSpace(int roomsCount, double area) {
+    public static Space createSpace(int roomsCount, double area) {
         return factory.createSpace(roomsCount,area);
     }
 
+    public static Space createSpace(Class<? extends Space> spaceClass, int roomsCount, double area) {
+        try {
+            return spaceClass.getConstructor(int.class, double.class).newInstance(roomsCount, area);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalArgumentException();
+        }
+    }
 
-    public Floor createFloor(int spacesCount) {
+    public static Floor createFloor(int spacesCount) {
         return factory.createFloor(spacesCount);
     }
 
-    public Floor createFloor(Space[] spaces) {
+    public static Floor createFloor(Class<? extends Floor> floorClass, int spacesCount) {
+        try {
+            return floorClass.getConstructor(int.class).newInstance(spacesCount);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static Floor createFloor(Space[] spaces) {
         return factory.createFloor(spaces);
     }
 
+    public static Floor createFloor(Class<? extends Floor> floorClass, Space[] spaces) {
+        try {
 
-    public Building createBuilding(int floorsCount, int[] spacesCounts) {
+            return floorClass.getConstructor(spaces.getClass()).newInstance( (Object) spaces); // (OBJECT) Это происходит потому ,
+            // что newInstance(Object...) объявлен с переменным числом аргументов Object.
+            // Поскольку массивы ковариантны, a Space[]также является Object[] и argArray интерпретируется как все аргументы вместо первого аргумента .
+            //также работает new Obect[]{spaces}
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static Building createBuilding(int floorsCount, int[] spacesCounts) {
         return factory.createBuilding(floorsCount, spacesCounts);
     }
 
-    public Building createBuilding(Floor[] floors) {
+    public static Building createBuilding(Class<? extends Building> buildingClass, int floorsCount, int[] spacesCounts){
+        try {
+            return buildingClass.getConstructor(int.class, spacesCounts.getClass()).newInstance(floorsCount, (Object) spacesCounts);
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static Building createBuilding(Floor[] floors) {
         return factory.createBuilding(floors);
+    }
+
+    public static Building createBuilding(Class<? extends Building> buildingClass, Floor[] floors){
+        try{
+            return buildingClass.getConstructor(floors.getClass()).newInstance(new Object[] {floors});
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public static void sortUp() {//TODO

@@ -15,6 +15,7 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.TypeVariable;
+import java.util.Comparator;
 import java.util.Scanner;
 
 
@@ -225,8 +226,18 @@ public class Buildings {
         }
     }
 
-    public static void sortUp() {//TODO
+    public static <T> void sort(T[] data, Comparator<T> comparator) {
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data.length - 1; j++) {
+                if (comparator.compare(data[j], data[j + 1]) > 0) {
+                    T tmp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = tmp;
+                }
+            }
+        }
     }
+
     public static void sortDown () { // TODO
     }
 

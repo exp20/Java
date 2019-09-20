@@ -55,6 +55,20 @@ public class Buildings {
         return factory.createBuilding(floors_array);
     }
 
+    public static Building inputBuilding(InputStream in, Class<? extends Building> buildingClass, Class<? extends Floor> floorClass, Class<? extends Space> spaceClass ) throws IOException {
+        DataInputStream d_in = new DataInputStream(new BufferedInputStream(in));
+        Floor[] floors_array = new Floor[d_in.readInt()];
+        for(int i=0; i < floors_array.length; i++){
+            int spaces_number = d_in.readInt();
+            Space[] buff_space_arr = new Space[spaces_number];
+            for(int j =0 ; j < spaces_number; j++){
+                buff_space_arr[j]= Buildings.createSpace(spaceClass,d_in.readInt(),d_in.readDouble());
+            }
+            floors_array[i] = Buildings.createFloor(floorClass,buff_space_arr);
+        }
+        return Buildings.createBuilding(buildingClass,floors_array);
+    }
+
 
     //записи здания в символьный поток
     public static void writeBuilding (Building building, Writer out){

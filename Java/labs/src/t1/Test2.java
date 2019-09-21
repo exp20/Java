@@ -1,3 +1,5 @@
+package t1;
+
 import t1.buildings.dwelling.Dwelling;
 import t1.buildings.dwelling.DwellingFloor;
 import t1.buildings.dwelling.Flat;

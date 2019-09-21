@@ -1,3 +1,5 @@
+package t1;
+
 import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import t1.buildings.dwelling.Dwelling;
 import t1.buildings.dwelling.Flat;

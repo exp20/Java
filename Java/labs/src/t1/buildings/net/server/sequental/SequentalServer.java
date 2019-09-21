@@ -1,6 +1,7 @@
 package t1.buildings.net.server.sequental;
 
 import t1.buildings.interfaces.Building;
+import t1.buildings.threads.CleanRepairSemaphore;
 import t1.exceptions.BuildingUnderArrestException;
 import t1.utilities.Buildings;
 import t1.utilities.factories.DwellingFactory;
@@ -12,7 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
-public class SequentalServer {
+public class SequentalServer{
     private static int PORT = 8090;
 
     public static void main(String ... args){

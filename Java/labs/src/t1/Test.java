@@ -1,4 +1,4 @@
-
+package t1;
 
 import t1.buildings.dwelling.*;
 import t1.buildings.dwelling.Dwelling;

@@ -1,3 +1,5 @@
+package t1;
+
 import t1.buildings.interfaces.Floor;
 import t1.buildings.office.OfficeFloor;
 import t1.buildings.threads.*;

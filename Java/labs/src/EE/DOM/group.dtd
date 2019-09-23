@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!--Документ содержит правила регламентирующие структуру документа -->
+        <!ELEMENT group (student*)> <!--Элемент group содержит 0 или больше дочерних элементов student-->
+
+        <!ELEMENT student (subject*,average?)> <!-- элемент student содержит элементы по порядку: 0 или неск элементов subject,
+        затем 0 или 1 элемент average-->
+        <!ATTLIST student
+                firstname CDATA #REQUIRED
+                lastname CDATA #REQUIRED
+                groupnumber CDATA #REQUIRED
+                >
+        <!--описание атрибутов элемента student-->
+        <!-- !ATTLIST элемент атрибут тип поведение_по_умолчанию-->
+        <!--CDATA - произвольная символьная строка-->
+        <!--#REQUIRED - отрибут является обязательным-->
+        <!ELEMENT subject EMPTY> <!--У элемента subject дочерние узлы отсутствуют-->
+        <!ATTLIST subject
+                title CDATA #REQUIRED
+                mark (1|2|3|4|5) #REQUIRED
+                >
+        <!-- тип mark - один из строковых атрибутов 1,2,3,4,5-->
+
+        <!ELEMENT average (#PCDATA)> <!--Элемет average содержит текст-->

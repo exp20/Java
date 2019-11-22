@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,7 +45,6 @@ public class Myservlet extends HttpServlet {
         g2d.setColor(new Color((random.nextInt(256)),random.nextInt(256),random.nextInt(256)));
         g2d.drawString("Hello",100,100);
         g2d.drawImage(img, null, 100, 100);  
-        File e = new File("ff");
         ImageIO.write(img, "png", out); //png - строка определяющая формат
         out.flush();
         out.close();

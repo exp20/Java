@@ -13,7 +13,7 @@ public class HibernateSession {
     private HibernateSession() {
     }
 
-    public static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory() throws Exception {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();
@@ -24,7 +24,7 @@ public class HibernateSession {
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
             } catch (Exception e) {
-                e.printStackTrace();
+               throw e;
             }
         }
         return sessionFactory;

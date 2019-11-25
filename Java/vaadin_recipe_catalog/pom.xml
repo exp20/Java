@@ -16,7 +16,7 @@
 	<properties>
 		<vaadin.version>8.9.2</vaadin.version>
 		<vaadin.plugin.version>8.9.2</vaadin.plugin.version>
-		<jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
+		<jetty.plugin.version>9.4.12.v20180830</jetty.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -81,7 +81,6 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>5.4.2.Final</version>
 		</dependency>
-
 
 	</dependencies>
 

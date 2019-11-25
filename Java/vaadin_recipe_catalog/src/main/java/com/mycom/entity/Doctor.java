@@ -20,6 +20,8 @@ public class Doctor {
     @Column (name = "\"specialization\"")
     private String specialization;
 
+    //TODO поле с рецептами этого доктора
+
     public Doctor(){
 
     }
@@ -59,6 +61,8 @@ public class Doctor {
     public void setSpecialization(String specialization){
         this.specialization=specialization;
     }
+
+    //TODO метод получения списка рецептов, подсчет колва в DAO
 
     public String toString(){
         return new String("doctor[ "+id+", "+name+", "+last_name+", "+honestly+", "+specialization+"]");

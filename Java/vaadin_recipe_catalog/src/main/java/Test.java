@@ -15,9 +15,12 @@ import java.sql.Date;
 
 public class Test {
     public static void main(String ... args){
-        SessionFactory sessionFactory = HibernateSession.getSessionFactory();
+        SessionFactory sessionFactory = null;
+        try {
+            sessionFactory = HibernateSession.getSessionFactory();
 
-       DoctorService doctorService = new DoctorService(sessionFactory);
+
+        DoctorService doctorService = new DoctorService(sessionFactory);
        RecipeService recipeService = new RecipeService(sessionFactory);
        PatientService patientService = new PatientService(sessionFactory);
        System.out.println(patientService.getAll());
@@ -45,5 +48,8 @@ public class Test {
         upd.setHonestly("changed отчество");
         doctorService.update(upd);
         */
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

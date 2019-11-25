@@ -18,7 +18,7 @@ public class RecipeService {
     }
 
 
-    public long add(Recipe recipe) throws HibernateException {
+    public long add(Recipe recipe) throws Exception {
         try(Session session = sessionFactory.openSession()){
             Transaction transaction = session.beginTransaction();
             recipeDAO = new RecipeDAO(session);
@@ -26,52 +26,52 @@ public class RecipeService {
             transaction.commit();
             return id;
         }
-        catch (HibernateException e){
+        catch (Exception e){
             throw e;
         }
     }
 
-    public List<Recipe> getAll() {
+    public List<Recipe> getAll() throws Exception {
         try(Session session = sessionFactory.openSession()){
             recipeDAO = new RecipeDAO(session);
             return recipeDAO.getAll();
         }
-        catch (HibernateException e){
+        catch (Exception e){
             throw e;
         }
     }
 
 
-    public Recipe findById(long id) {
+    public Recipe findById(long id) throws Exception {
         try(Session session = sessionFactory.openSession()){
             recipeDAO = new RecipeDAO(session);
             return recipeDAO.findById(id);
         }
-        catch (HibernateException e){
+        catch (Exception e){
             throw e;
         }
     }
 
-    public void update(Recipe recipe) {
+    public void update(Recipe recipe) throws Exception {
         try(Session session = sessionFactory.openSession()){
             Transaction transaction = session.beginTransaction();
             recipeDAO = new RecipeDAO(session);
             recipeDAO.update(recipe);
             transaction.commit();
         }
-        catch (HibernateException e){
+        catch (Exception e){
             throw e;
         }
     }
 
 
-    public void delete(Recipe recipe) {
+    public void delete(Recipe recipe) throws Exception {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             recipeDAO = new RecipeDAO(session);
             recipeDAO.delete(recipe);
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             throw e;
         }
     }

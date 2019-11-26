@@ -43,13 +43,12 @@ public class MainView extends UI{
 
         // остальная часть страницы
         CssLayout viewContainer = new CssLayout();
-        //viewContainer.setWidth(null);
+
 
         CssLayout mainLayout = new CssLayout();
         mainLayout.setSizeFull();
 
         mainLayout.addComponents(menu,viewContainer);
-
         setContent(mainLayout);
 
 

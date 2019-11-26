@@ -3,11 +3,14 @@ package com.mycom.view;
 import com.mycom.entity.Doctor;
 import com.mycom.services.DoctorService;
 import com.mycom.services.PatientService;
+import com.mycom.services.RecipeService;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 
 public class DoctorsView extends Composite implements View {
@@ -15,19 +18,25 @@ public class DoctorsView extends Composite implements View {
     private DoctorService doctorService;
     private Grid<Doctor> grid;
     private Label title;
+    private Label statistic_lable;
     private Button add_butt;
     private Button del_butt;
     private Button change_butt;
     private TextField del_or_change_id_field;
     private HorizontalLayout del_change_level;
+
+    private Map<BigInteger,BigInteger> recipes_statistic;
     public DoctorsView(){
-        // TODO СТАТИСТИКА КОЛ-ВА РЕЦЕПТОВ
         mainLayout = new VerticalLayout();
         mainLayout.setSizeFull();
 
         title = new Label("Врачи");
         mainLayout.addComponent(title);
         mainLayout.setComponentAlignment(title,Alignment.TOP_LEFT);
+
+        statistic_lable = new Label("Всего рецептов:");
+        mainLayout.addComponent(statistic_lable);
+        mainLayout.setComponentAlignment(statistic_lable,Alignment.TOP_LEFT);
 
         add_butt = new Button("Добавить", e-> addButtonAction());
         mainLayout.addComponent(add_butt);
@@ -46,15 +55,21 @@ public class DoctorsView extends Composite implements View {
         del_or_change_id_field.setPlaceholder("id");
         del_change_level.addComponent(del_or_change_id_field);
 
-        grid = new Grid<>(Doctor.class);
+        grid = new Grid<>();
         grid.setVisible(false);
 
 
         mainLayout.addComponent(grid);
         mainLayout.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
-            // TODO
-            //grid.setColumns("id","Имя","Фамилия","Отчество","Телефон");
 
+        grid.setVisible(false);
+        grid.addColumn(Doctor::getId).setCaption("id");
+        grid.addColumn(Doctor::getName).setCaption("Имя");
+        grid.addColumn(Doctor::getLast_name).setCaption("Фамилия");
+        grid.addColumn(Doctor::getHonestly).setCaption("Отчество");
+        grid.addColumn(Doctor::getSpecialization).setCaption("Специализация");
+        //в поле recipes_statistic лежит мапа <доктор_id,кол-во рецептов>
+        grid.addColumn(Doctor -> recipes_statistic.get(BigInteger.valueOf(Doctor.getId()))).setCaption("Кол-во рецептов");
         setCompositionRoot(mainLayout); // ОБЯЗАТЕЛНО добавить компоненты
         init();
         }
@@ -87,6 +102,11 @@ public class DoctorsView extends Composite implements View {
                 return;
             }
             else {
+                Object[] statistic = doctorService.getDoctorRecipesStatistic();
+                recipes_statistic = (Map<BigInteger, BigInteger>) statistic[0];
+                BigInteger recipes_count = (BigInteger)statistic[1];
+                this.statistic_lable.setValue("Всего рецептов: "+recipes_count.toString());
+                System.out.println("FFF"+statistic[1]);
                 grid.setItems(doctors);
                 grid.setVisible(true);
             }

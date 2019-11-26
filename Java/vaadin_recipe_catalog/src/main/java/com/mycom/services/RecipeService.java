@@ -3,18 +3,31 @@ package com.mycom.services;
 import com.mycom.dao.RecipeDAO;
 import com.mycom.dao.RecipeDAOInterface;
 import com.mycom.entity.Recipe;
+import com.mycom.utils.HibernateSession;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecipeService {
     private RecipeDAOInterface recipeDAO;
     private SessionFactory sessionFactory;
+
+
     public RecipeService(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
+    }
+    public RecipeService() throws Exception{
+
+        try {
+            this.sessionFactory = HibernateSession.getSessionFactory();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 

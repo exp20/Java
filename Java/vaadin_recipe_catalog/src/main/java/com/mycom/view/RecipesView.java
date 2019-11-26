@@ -1,19 +1,20 @@
 package com.mycom.view;
 
-
-import com.mycom.entity.Patient;
-import com.mycom.services.PatientService;
+import com.mycom.entity.Recipe;
+import com.mycom.services.RecipeService;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import org.hibernate.exception.ConstraintViolationException;
+
 import java.util.List;
 
+public class RecipesView extends Composite implements View {
 
-public class PatientsView extends Composite implements View {
+    // TODO ФИЛЬТР
     private VerticalLayout mainLayout;
 
-    private PatientService patientService;
-    private Grid<Patient> grid;
+    private RecipeService recipeService;
+    private Grid<Recipe> grid;
     private Label title;
     private Button add_butt;
     private Button del_butt;
@@ -23,12 +24,11 @@ public class PatientsView extends Composite implements View {
 
 
 
-
-    public PatientsView(){
+    public RecipesView(){
         mainLayout = new VerticalLayout();
         mainLayout.setSizeFull();
 
-        title = new Label("Пациенты");
+        title = new Label("Рецепты");
         mainLayout.addComponent(title);
         mainLayout.setComponentAlignment(title,Alignment.TOP_LEFT);
 
@@ -51,11 +51,13 @@ public class PatientsView extends Composite implements View {
 
         grid = new Grid<>();
         grid.setVisible(false);
-        grid.addColumn(Patient::getId).setCaption("id");
-        grid.addColumn(Patient::getName).setCaption("Имя");
-        grid.addColumn(Patient::getLast_name).setCaption("Фамилия");
-        grid.addColumn(Patient::getHonestly).setCaption("Отчество");
-        grid.addColumn(Patient::getPhone).setCaption("Телефон");
+        grid.addColumn(Recipe::getId).setCaption("id");
+        grid.addColumn(Recipe::getDescription).setCaption("Описание");
+        grid.addColumn(Recipe -> Recipe.getPatient().getId()).setCaption("Пациент id");
+        grid.addColumn(Recipe -> Recipe.getDoctor().getId()).setCaption("Доктор id");
+        grid.addColumn(Recipe::getCreation_date).setCaption("Дата создания");
+        grid.addColumn(Recipe::getValidity).setCaption("Срок действия");
+        grid.addColumn(Recipe::getPriority).setCaption("Приоритет");
 
         mainLayout.addComponent(grid);
         mainLayout.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
@@ -66,10 +68,10 @@ public class PatientsView extends Composite implements View {
     private void init(){
 
         try{
-            this.patientService = new PatientService();
+            this.recipeService = new RecipeService();
+            grid.setItems(recipeService.getAll());
         }
         catch (Exception e){
-
             Notification.show("Exception",
                     e.toString(),
                     Notification.Type.ERROR_MESSAGE);
@@ -81,7 +83,7 @@ public class PatientsView extends Composite implements View {
 
     private void addButtonAction(){
 
-        ModalCreateAddView modal_window = new ModalCreateAddView(this,patientService,null);
+        ModalCreateAddView modal_window = new ModalCreateAddView(this,recipeService,null);
         modal_window.addCloseListener(e -> updateTable());
         getUI().addWindow(modal_window);
     }
@@ -89,13 +91,13 @@ public class PatientsView extends Composite implements View {
 
     private void updateTable(){
         try {
-            List<Patient> patients = patientService.getAll();
-            if (patients.size()==0){
-                this.title.setCaption("Список пациентов пуст");
+            List<Recipe> recipes = recipeService.getAll();
+            if (recipes.size()==0){
+                this.title.setCaption("Список рецептов пуст");
                 return;
             }
             else {
-                grid.setItems(patients);
+                grid.setItems(recipeService.getAll());
                 grid.setVisible(true);
             }
         } catch (Exception e) {
@@ -108,34 +110,21 @@ public class PatientsView extends Composite implements View {
 
     private void delButtonAction()  {
         try{
-           int id =  Integer.parseInt(del_or_change_id_field.getValue());
-           patientService.delete(patientService.findById(id));
-           updateTable();
+            int id =  Integer.parseInt(del_or_change_id_field.getValue());
+            recipeService.delete(recipeService.findById(id));
+            updateTable();
         }
         catch (Exception e) {
-            Throwable t = e.getCause();
-            while ((t != null) && !(t instanceof ConstraintViolationException)) {
-                t = t.getCause();
-            }
-            if (t instanceof ConstraintViolationException) {
-                Notification.show("Exception",
-                        "Нельзя удалить пациента имеющего рецепт",
-                        Notification.Type.ERROR_MESSAGE);
-            }
-            else
-            {
                 Notification.show("Exception",
                         e.toString(),
                         Notification.Type.ERROR_MESSAGE);
-
             }
-        }
     }
 
     private void changeButtonAction(){
         try{
             int id =  Integer.parseInt(del_or_change_id_field.getValue());
-            ModalCreateAddView modal_window = new ModalCreateAddView(this,patientService,patientService.findById(id));
+            ModalCreateAddView modal_window = new ModalCreateAddView(this,recipeService,recipeService.findById(id));
             modal_window.addCloseListener(e -> updateTable());
             getUI().addWindow(modal_window);
 
@@ -154,5 +143,6 @@ public class PatientsView extends Composite implements View {
         }
 
     }
+
 
 }

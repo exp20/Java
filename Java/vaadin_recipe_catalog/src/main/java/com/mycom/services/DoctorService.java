@@ -13,11 +13,15 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DoctorService  {
     private  DoctorDAOInterface doctorDAO;
     private  SessionFactory sessionFactory;
+
 
     public DoctorService() throws Exception{
         try {
@@ -87,6 +91,30 @@ public class DoctorService  {
         }
 
         catch (Exception e){
+            throw e;
+        }
+    }
+
+    //возвращает количество рецептов у соответствующего доктора
+    public Object[] getDoctorRecipesStatistic(){
+        try (Session session = sessionFactory.openSession()) {
+            List<Object[]> list = session.createSQLQuery("select doctor_id, COUNT(recipe_id) as recipe_count " +
+                    "from( " +
+                    "select PUBLIC.\"doctors\".\"id\" as doctor_id, PUBLIC.\"recipes\".\"id\" as recipe_id " +
+                    "from ( PUBLIC.\"doctors\" LEFT JOIN PUBLIC.\"recipes\" " +
+                    "ON \"doctors\".\"id\"= \"recipes\".\"doctor_id\")) " +
+                    "group by doctor_id;").list();
+            Map<BigInteger,BigInteger> result_1 = new HashMap<>();
+            BigInteger recipe_count= BigInteger.valueOf(0);
+            for( Object[] obj_row:list){
+                System.out.println((BigInteger) obj_row[0]);
+                System.out.println((BigInteger) obj_row[1]);
+                result_1.put((BigInteger) obj_row[0],(BigInteger) obj_row[1]);
+               recipe_count =  recipe_count.add((BigInteger) obj_row[1]); //bigInteger неизменяемый
+            }
+            Object[] result = new Object[]{result_1,recipe_count};
+            return result;
+        } catch (Exception e) {
             throw e;
         }
     }

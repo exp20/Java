@@ -1,5 +1,7 @@
 package com.mycom.entity;
 
+import com.mycom.services.RecipePriorities;
+
 import javax.persistence.*;
 import java.sql.Date;
 

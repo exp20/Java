@@ -12,6 +12,7 @@ import org.hibernate.Transaction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RecipeService {
     private RecipeDAOInterface recipeDAO;
@@ -88,4 +89,32 @@ public class RecipeService {
             throw e;
         }
     }
+    public List<Recipe> filtering(List<Recipe> recipes, String filter_description, Long id_long, RecipePriorities filter_priority){
+        RecipeFilter myfilter = new RecipeFilter(filter_description,id_long,filter_priority);
+        List<Recipe> fileted = recipes.stream().filter( recipe -> myfilter.useFilter((Recipe)recipe)).collect(Collectors.toList());
+        return fileted;
+    }
+
+    private class RecipeFilter {
+        private String description;
+        private Long id;
+        private RecipePriorities priority;
+
+         RecipeFilter (String description, Long id, RecipePriorities priority)
+        {
+            this.description=description;
+            this.id = id;
+            this.priority = priority;
+        }
+
+        public boolean useFilter(Recipe recipe){
+            boolean result = true;
+            //содержит ли описание символы из фильтра если символов описания в филтре нет то все записи подходят
+            result &= ( (description == null || description.length()==0) ? true : (recipe.getDescription().contains(description)));
+            result &= ( id == null ? true: (recipe.getPatient().getId()==id));
+            result &= (priority == null ? true : (priority.toString().equals(recipe.getPriority())));
+            return result;
+        }
+    }
+
 }

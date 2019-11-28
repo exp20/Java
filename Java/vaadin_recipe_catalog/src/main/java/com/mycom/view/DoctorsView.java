@@ -106,7 +106,6 @@ public class DoctorsView extends Composite implements View {
                 recipes_statistic = (Map<BigInteger, BigInteger>) statistic[0];
                 BigInteger recipes_count = (BigInteger)statistic[1];
                 this.statistic_lable.setValue("Всего рецептов: "+recipes_count.toString());
-                System.out.println("FFF"+statistic[1]);
                 grid.setItems(doctors);
                 grid.setVisible(true);
             }
@@ -120,9 +119,25 @@ public class DoctorsView extends Composite implements View {
 
     private void delButtonAction()  {
         try{
+            if (del_or_change_id_field.getValue() == null || del_or_change_id_field.getValue().length()==0){
+                Notification.show("Exception",
+                        "Введите id для удаления",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
             int id =  Integer.parseInt(del_or_change_id_field.getValue());
             doctorService.delete(doctorService.findById(id));
             updateTable();
+        }
+        catch (NumberFormatException ex) {
+            Notification.show("Exception",
+                    "Введите целое число",
+                    Notification.Type.ERROR_MESSAGE);
+        }
+        catch (IllegalArgumentException e){
+            Notification.show("Exception",
+                    "не существует врача с таким id",
+                    Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e) {
             Throwable t = e.getCause();
@@ -146,17 +161,37 @@ public class DoctorsView extends Composite implements View {
 
     private void changeButtonAction(){
         try{
-            int id =  Integer.parseInt(del_or_change_id_field.getValue());
-            ModalCreateAddView modal_window = new ModalCreateAddView(this,doctorService,doctorService.findById(id));
+            if (del_or_change_id_field.getValue() == null || del_or_change_id_field.getValue().length()==0){
+                Notification.show("Exception",
+                        "Введите id для изменения",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            long id =  Long.parseLong(del_or_change_id_field.getValue());
+            Doctor find_doctor = doctorService.findById(id);
+            if (find_doctor == null)
+            {
+                Notification.show("Exception",
+                        "не существует врача с таким id",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            ModalCreateAddView modal_window = new ModalCreateAddView(this,doctorService,find_doctor);
             modal_window.addCloseListener(e -> updateTable());
             getUI().addWindow(modal_window);
 
         }
+
         catch (NumberFormatException ex){
             Notification.show("Exception",
                     "Введите целое число",
                     Notification.Type.ERROR_MESSAGE);
 
+        }
+        catch (IllegalArgumentException e){
+            Notification.show("Exception",
+                    "не существует врача с таким id",
+                    Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e){
             Notification.show("Exception",

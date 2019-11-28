@@ -108,9 +108,25 @@ public class PatientsView extends Composite implements View {
 
     private void delButtonAction()  {
         try{
+            if (del_or_change_id_field.getValue() == null || del_or_change_id_field.getValue().length()==0) {
+                Notification.show("Exception",
+                        "Введите id для удаления",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
            int id =  Integer.parseInt(del_or_change_id_field.getValue());
            patientService.delete(patientService.findById(id));
            updateTable();
+        }
+        catch (NumberFormatException ex) {
+            Notification.show("Exception",
+                    "Введите целое число",
+                    Notification.Type.ERROR_MESSAGE);
+        }
+        catch (IllegalArgumentException e){
+            Notification.show("Exception",
+                    "не существует пациента с таким id",
+                    Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e) {
             Throwable t = e.getCause();
@@ -134,8 +150,22 @@ public class PatientsView extends Composite implements View {
 
     private void changeButtonAction(){
         try{
-            int id =  Integer.parseInt(del_or_change_id_field.getValue());
-            ModalCreateAddView modal_window = new ModalCreateAddView(this,patientService,patientService.findById(id));
+            if (del_or_change_id_field.getValue() == null || del_or_change_id_field.getValue().length()==0){
+                Notification.show("Exception",
+                        "Введите id для изменения",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            long id =  Long.parseLong(del_or_change_id_field.getValue());
+            Patient find_patient = patientService.findById(id);
+            if (find_patient == null)
+            {
+                Notification.show("Exception",
+                        "не существует пациента с таким id",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            ModalCreateAddView modal_window = new ModalCreateAddView(this,patientService,find_patient);
             modal_window.addCloseListener(e -> updateTable());
             getUI().addWindow(modal_window);
 
@@ -145,6 +175,11 @@ public class PatientsView extends Composite implements View {
                     "Введите целое число",
                     Notification.Type.ERROR_MESSAGE);
 
+        }
+        catch (IllegalArgumentException e){
+            Notification.show("Exception",
+                    "не существует пациента с таким id",
+                    Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e){
             Notification.show("Exception",

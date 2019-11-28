@@ -27,6 +27,7 @@ public class DoctorService  {
         try {
             this.sessionFactory = HibernateSession.getSessionFactory();
         } catch (Exception e) {
+          //  e.printStackTrace();
             throw e;
         }
     }
@@ -44,6 +45,7 @@ public class DoctorService  {
             return id;
         }
         catch (Exception e){
+        //    e.printStackTrace();
             throw e;
         }
     }
@@ -54,6 +56,7 @@ public class DoctorService  {
             return doctorDAO.getAll();
         }
         catch (Exception e){
+         //   e.printStackTrace();
             throw e;
         }
     }
@@ -65,6 +68,7 @@ public class DoctorService  {
             return doctorDAO.findById(id);
         }
         catch (Exception e){
+           // e.printStackTrace();
             throw e;
         }
 }
@@ -77,6 +81,7 @@ public class DoctorService  {
             transaction.commit();
         }
         catch (Exception e){
+           // e.printStackTrace();
             throw e;
         }
     }
@@ -91,6 +96,7 @@ public class DoctorService  {
         }
 
         catch (Exception e){
+           // e.printStackTrace();
             throw e;
         }
     }

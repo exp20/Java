@@ -2,15 +2,15 @@ package com.mycom.view;
 
 import com.mycom.entity.Recipe;
 import com.mycom.services.RecipeService;
+import com.mycom.services.RecipePriorities;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecipesView extends Composite implements View {
 
-    // TODO ФИЛЬТР
     private VerticalLayout mainLayout;
 
     private RecipeService recipeService;
@@ -22,6 +22,13 @@ public class RecipesView extends Composite implements View {
     private TextField del_or_change_id_field;
     private HorizontalLayout del_change_level;
 
+    //фильтр
+    private HorizontalLayout filter_layout;
+    private TextField description_filter_field;
+    private TextField patient_id_filter_field;
+    private ComboBox recipe_priority_combobox;
+    private Button start_filter;
+
 
 
     public RecipesView(){
@@ -31,6 +38,30 @@ public class RecipesView extends Composite implements View {
         title = new Label("Рецепты");
         mainLayout.addComponent(title);
         mainLayout.setComponentAlignment(title,Alignment.TOP_LEFT);
+
+        filter_layout = new HorizontalLayout();
+        mainLayout.addComponent(filter_layout);
+        mainLayout.setComponentAlignment(filter_layout,Alignment.TOP_LEFT);
+
+        start_filter = new Button("Фильтровать:", e-> filterActionButton());
+        filter_layout.addComponent(start_filter);
+
+        description_filter_field = new TextField();
+        description_filter_field.setPlaceholder("описание рецепта");
+        filter_layout.addComponent(description_filter_field);
+
+        patient_id_filter_field = new TextField();
+        patient_id_filter_field.setPlaceholder("id пациента");
+        filter_layout.addComponent(patient_id_filter_field);
+
+        recipe_priority_combobox = new ComboBox();
+        recipe_priority_combobox.setItems(RecipePriorities.NORMAL, RecipePriorities.CITO, RecipePriorities.STATIM);
+        recipe_priority_combobox.setPlaceholder("Приоритет");
+        recipe_priority_combobox.setTextInputAllowed(false);
+        filter_layout.addComponent(recipe_priority_combobox);
+
+        mainLayout.addComponent(filter_layout);
+
 
         add_butt = new Button("Добавить", e-> addButtonAction());
         mainLayout.addComponent(add_butt);
@@ -65,6 +96,31 @@ public class RecipesView extends Composite implements View {
         setCompositionRoot(mainLayout); // ОБЯЗАТЕЛНО добавить компоненты
         init();
     }
+
+    private void filterActionButton() {
+        try {
+            String filter_description = this.description_filter_field.getValue();
+            String filter_id_string = this.patient_id_filter_field.getValue();
+            RecipePriorities filter_priority = (RecipePriorities) this.recipe_priority_combobox.getValue();
+            Long id_long = (filter_id_string==null || filter_id_string.length()==0 ?null :Long.parseLong(filter_id_string));
+            List<Recipe> recipes = recipeService.getAll();
+
+            this.grid.setItems(recipeService.filtering(recipes, filter_description,id_long,filter_priority));
+
+        }
+        catch (NumberFormatException e){
+            Notification.show("Exception",
+                    "Укажите число в поле "+this.patient_id_filter_field.getCaption()+" фильтра",
+                    Notification.Type.ERROR_MESSAGE);
+        }
+        catch (Exception e) {
+            Notification.show("Exception",
+                    e.toString(),
+                    Notification.Type.ERROR_MESSAGE);
+        }
+    }
+
+
     private void init(){
 
         try{
@@ -82,7 +138,6 @@ public class RecipesView extends Composite implements View {
     }
 
     private void addButtonAction(){
-
         ModalCreateAddView modal_window = new ModalCreateAddView(this,recipeService,null);
         modal_window.addCloseListener(e -> updateTable());
         getUI().addWindow(modal_window);
@@ -110,9 +165,26 @@ public class RecipesView extends Composite implements View {
 
     private void delButtonAction()  {
         try{
-            int id =  Integer.parseInt(del_or_change_id_field.getValue());
+            if (del_or_change_id_field.getValue() == null || del_or_change_id_field.getValue().length()==0) {
+                Notification.show("Exception",
+                        "Введите id для удаления",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            Long id =  Long.parseLong(del_or_change_id_field.getValue());
             recipeService.delete(recipeService.findById(id));
             updateTable();
+        }
+        catch (NumberFormatException ex) {
+            Notification.show("Exception",
+                    "Введите целое число",
+                    Notification.Type.ERROR_MESSAGE);
+        }
+        catch (IllegalArgumentException e){
+            e.printStackTrace();
+            Notification.show("Exception",
+                    "не существует рецепта с таким id",
+                    Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e) {
                 Notification.show("Exception",
@@ -123,8 +195,22 @@ public class RecipesView extends Composite implements View {
 
     private void changeButtonAction(){
         try{
-            int id =  Integer.parseInt(del_or_change_id_field.getValue());
-            ModalCreateAddView modal_window = new ModalCreateAddView(this,recipeService,recipeService.findById(id));
+            if (del_or_change_id_field.getValue() == null || del_or_change_id_field.getValue().length()==0){
+                Notification.show("Exception",
+                        "Введите id для изменения",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            long id =  Long.parseLong(del_or_change_id_field.getValue());
+            Recipe find_recipe = recipeService.findById(id);
+            if (find_recipe == null)
+            {
+                Notification.show("Exception",
+                        "не существует рецепта с таким id",
+                        Notification.Type.ERROR_MESSAGE);
+                return;
+            }
+            ModalCreateAddView modal_window = new ModalCreateAddView(this,recipeService,find_recipe);
             modal_window.addCloseListener(e -> updateTable());
             getUI().addWindow(modal_window);
 
@@ -135,9 +221,16 @@ public class RecipesView extends Composite implements View {
                     Notification.Type.ERROR_MESSAGE);
 
         }
-        catch (Exception e){
+        catch (IllegalArgumentException e){
+            e.printStackTrace();
             Notification.show("Exception",
-                    "Введен не верный id",
+                    "не существует рецепта с таким id",
+                    Notification.Type.ERROR_MESSAGE);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Notification.show("Exception",
+                    e.toString(),
                     Notification.Type.ERROR_MESSAGE);
 
         }

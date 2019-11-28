@@ -2,10 +2,11 @@ package com.mycom.entity;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table (name = "\"doctors\"", schema = "\"PUBLIC\"")
-public class Doctor {
+public class Doctor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "\"id\"")

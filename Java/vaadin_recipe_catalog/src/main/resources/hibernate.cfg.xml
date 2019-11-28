@@ -6,8 +6,8 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
         <!-- In-Process database connection-->
-       <!-- <property name="hibernate.connection.url">jdbc:hsqldb:file:demodb;shutdown=true</property> -->
-        <property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost/demodb;shutdown=true</property>
+       <property name="hibernate.connection.url">jdbc:hsqldb:file:F:\Programms\HSQLDB\hsqldb-2.5.0\hsqldb-2.5.0\hsqldb\hsqldb\demodb;shutdown=true</property>
+       <!-- <property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost/demodb;shutdown=true</property> -->
         <property name="hibernate.connection.username">user1</property>
         <property name="hibernate.connection.password">user1</property>
         <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>

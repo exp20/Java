@@ -7,7 +7,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class RecipesView extends Composite implements View {
 

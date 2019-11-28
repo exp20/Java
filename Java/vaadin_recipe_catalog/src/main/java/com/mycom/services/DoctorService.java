@@ -3,16 +3,10 @@ package com.mycom.services;
 import com.mycom.dao.DoctorDAO;
 import com.mycom.dao.DoctorDAOInterface;
 import com.mycom.entity.Doctor;
-
-
 import com.mycom.utils.HibernateSession;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
-
-
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;

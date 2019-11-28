@@ -2,8 +2,6 @@ package com.mycom.view;
 
 import com.mycom.entity.Doctor;
 import com.mycom.services.DoctorService;
-import com.mycom.services.PatientService;
-import com.mycom.services.RecipeService;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import org.hibernate.exception.ConstraintViolationException;

@@ -113,8 +113,6 @@ public class DoctorService  {
             Map<BigInteger,BigInteger> result_1 = new HashMap<>();
             BigInteger recipe_count= BigInteger.valueOf(0);
             for( Object[] obj_row:list){
-                System.out.println((BigInteger) obj_row[0]);
-                System.out.println((BigInteger) obj_row[1]);
                 result_1.put((BigInteger) obj_row[0],(BigInteger) obj_row[1]);
                recipe_count =  recipe_count.add((BigInteger) obj_row[1]); //bigInteger неизменяемый
             }

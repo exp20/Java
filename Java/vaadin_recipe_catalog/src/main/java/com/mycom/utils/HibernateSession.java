@@ -22,7 +22,6 @@ public class HibernateSession {
                 configuration.addAnnotatedClass(Recipe.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
-
             } catch (Exception e) {
                throw e;
             }

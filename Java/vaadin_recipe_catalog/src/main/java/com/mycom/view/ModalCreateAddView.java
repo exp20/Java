@@ -206,15 +206,18 @@ public class ModalCreateAddView  extends Window {
     private void changeRecipeButtonAction(Recipe update_recipe) {
         boolean close = false; //закрыть окно если все норм
         try {
-            recipe_binder.writeBean(update_recipe);
+            Recipe buff = new Recipe();
+            recipe_binder.writeBean(buff);
+            update_recipe.setDescription(buff.getDescription());
+
             if (recipe_priority_combobox.getSelectedItem() == null || !recipe_priority_combobox.getSelectedItem().isPresent()){
                 Notification.show("Exception",
                         "Выберите приоритет",
                         Notification.Type.ERROR_MESSAGE);
                 return;
             }
-            RecipePriorities ppp = (RecipePriorities)recipe_priority_combobox.getSelectedItem().get();
-            update_recipe.setPriority(ppp.toString());
+            RecipePriorities priority = (RecipePriorities)recipe_priority_combobox.getSelectedItem().get();
+            update_recipe.setPriority(priority.toString());
             LocalDateTime creatDate = creationDate.getValue();
             LocalDateTime val = validity.getValue();
             if (val == null || creatDate == null){
@@ -225,29 +228,6 @@ public class ModalCreateAddView  extends Window {
             }
             update_recipe.setCreation_date(convertLocalDateTimeToDate(creatDate));
             update_recipe.setValidity(convertLocalDateTimeToDate(val));
-            /*
-            if (recipe_doctor_id.getValue() == null || recipe_doctor_id.getValue().length()==0 ||recipe_patient_id.getValue() == null || recipe_patient_id.getValue().length()==0) {
-                Notification.show("Exception",
-                        "Введите id пациента/врача",
-                        Notification.Type.ERROR_MESSAGE);
-                return;
-            }
-            doctorService = new DoctorService();
-            patientService = new PatientService();
-            long doc_id = Long.parseLong(recipe_doctor_id.getValue());
-            long pat_id = Long.parseLong(recipe_patient_id.getValue());
-            Doctor doctor = doctorService.findById(doc_id);
-            Patient patient = patientService.findById(pat_id);
-            if (doctor == null || patient == null)
-            {
-                Notification.show("Exception",
-                        "Не существует такого id пациента/врача",
-                        Notification.Type.ERROR_MESSAGE);
-                return;
-            }
-            update_recipe.setDoctor(doctor);
-            update_recipe.setPatient(patient);*/
-
             recipeService.update(update_recipe);
             close = true;
         }

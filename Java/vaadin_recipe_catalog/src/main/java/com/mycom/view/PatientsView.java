@@ -69,7 +69,7 @@ public class PatientsView extends Composite implements View {
             this.patientService = new PatientService();
         }
         catch (Exception e){
-
+            e.printStackTrace();
             Notification.show("Exception",
                     e.toString(),
                     Notification.Type.ERROR_MESSAGE);
@@ -99,6 +99,7 @@ public class PatientsView extends Composite implements View {
                 grid.setVisible(true);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Notification.show("Exception",
                     e.toString(),
                     Notification.Type.ERROR_MESSAGE);
@@ -129,6 +130,7 @@ public class PatientsView extends Composite implements View {
                     Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e) {
+            e.printStackTrace();
             Throwable t = e.getCause();
             while ((t != null) && !(t instanceof ConstraintViolationException)) {
                 t = t.getCause();
@@ -182,6 +184,7 @@ public class PatientsView extends Composite implements View {
                     Notification.Type.ERROR_MESSAGE);
         }
         catch (Exception e){
+            e.printStackTrace();
             Notification.show("Exception",
                     "Введен не верный id",
                     Notification.Type.ERROR_MESSAGE);

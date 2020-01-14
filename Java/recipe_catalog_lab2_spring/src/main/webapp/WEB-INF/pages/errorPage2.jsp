@@ -10,13 +10,15 @@
 
 
 <p><a href="index">Main page</a></p>
-<p>${err.toString()}<p>
+<p>${message}<p>
+<p>${error_message.toString()}<p>
+
 <p><p>
 <p>
-    <c:forEach items="${message}" var="message">
+    <c:forEach items="${error_message}" var="er_message">
     <tr>
-       <td>${message.getClassName()}
-           ${message.toString()}
+       <td>${er_essage.getClassName()}
+           ${er_message.toString()}
        </td>
     </tr>
 </c:forEach>

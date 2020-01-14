@@ -18,8 +18,8 @@ public class Doctor implements Serializable {
     private String name;
     @Column (name = "\"last_name\"")
     private String last_name;
-    @Column (name = "\"honestly\"")
-    private String honestly;
+    @Column (name = "\"patronymic\"")
+    private String patronymic;
     @Column (name = "\"specialization\"")
     private String specialization;
 
@@ -28,10 +28,10 @@ public class Doctor implements Serializable {
     public Doctor(){
 
     }
-    public Doctor(String name, String last_name, String honestly, String specialization){
+    public Doctor(String name, String last_name, String patronymic, String specialization){
         this.name=name;
         this.last_name=last_name;
-        this.honestly=honestly;
+        this.patronymic=patronymic;
         this.specialization=specialization;
     }
 
@@ -45,8 +45,8 @@ public class Doctor implements Serializable {
     public String getLast_name(){
         return last_name;
     }
-    public String getHonestly(){
-        return honestly;
+    public String getPatronymic(){
+        return patronymic;
     }
     public String getSpecialization(){
         return specialization;
@@ -58,8 +58,8 @@ public class Doctor implements Serializable {
     public void setLast_name(String last_name){
         this.last_name = last_name;
     }
-    public void setHonestly(String honestly){
-        this.honestly = honestly;
+    public void setPatronymic(String honestly){
+        this.patronymic = honestly;
     }
     public void setSpecialization(String specialization){
         this.specialization=specialization;
@@ -68,6 +68,6 @@ public class Doctor implements Serializable {
 
 
     public String toString(){
-        return new String("doctor[ "+id+", "+name+", "+last_name+", "+honestly+", "+specialization+"]");
+        return new String("doctor[ "+id+", "+name+", "+last_name+", "+patronymic+", "+specialization+"]");
     }
 }

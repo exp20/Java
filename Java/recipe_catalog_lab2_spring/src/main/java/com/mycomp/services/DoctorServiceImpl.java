@@ -3,36 +3,24 @@ package com.mycomp.services;
 
 import com.mycomp.model.dao.DoctorDAO;
 import com.mycomp.model.entity.Doctor;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import javax.transaction.Transactional;
-import java.math.BigInteger;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 
 
 @Service
 public class DoctorServiceImpl implements DoctorService{
 
     private DoctorDAO doctorDAO;
-/*
 
-    public long add(Doctor doctor) throws Exception {
-       Session session = entityManager.unwrap(Session.class);
-        doctorDAO = new DoctorDAO(session);
-            Transaction transaction = session.beginTransaction();
-            long id  = doctorDAO.add(doctor);
-            transaction.commit();
-            return id;
-    }
-    */
+
     @Autowired
     public void setDocotrDAO(DoctorDAO docotrDAO) {
     this.doctorDAO = docotrDAO;
@@ -43,34 +31,28 @@ public class DoctorServiceImpl implements DoctorService{
     public List<Doctor> getAll() throws Exception {
            return doctorDAO.getAll();
     }
+    @Transactional
+    public long add(Doctor doctor) throws Exception {
+        return doctorDAO.add(doctor);
+    }
 
-/*
+    @Transactional
     public Doctor findById(long id) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        doctorDAO = new DoctorDAO(session);
-            return doctorDAO.findById(id);
+      return doctorDAO.findById(id);
     }
-
+    @Transactional
     public void update(Doctor doctor) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        doctorDAO = new DoctorDAO(session);
-            Transaction transaction = session.beginTransaction();
-            doctorDAO.update(findById(doctor.getId()));
-            transaction.commit();
+       doctorDAO.update(doctor);
     }
-
+    @Transactional
     public void delete(Doctor doctor) throws Exception {
         //////// Важный момент неободимо перезагрузить удаляемый объект в сессии удаления чтобы он закэшировался и был виден hhibernane
         /// иначе будет java.lang.IllegalArgumentException: Removing a detached instance
-       // session = entityManager.unwrap(Session.class);
-        Session session = entityManager.unwrap(Session.class);
-        doctorDAO = new DoctorDAO(session);
-        Transaction transaction = session.beginTransaction();
+
         Doctor delete_d = findById(doctor.getId());
         doctorDAO.delete(delete_d);
-        transaction.commit();
     }
-
+/*
     //возвращает количество рецептов у соответствующего доктора
     public Object[] getDoctorRecipesStatistic(){
         try{

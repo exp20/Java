@@ -12,8 +12,8 @@ public class Patient {
     private long id;
     @Column (name = "\"name\"")
     private String name;
-    @Column (name = "\"honestly\"")
-    private String honestly;
+    @Column (name = "\"patronymic\"")
+    private String patronymic;
     @Column (name = "\"last_name\"")
     private String last_name;
     @Column (name = "\"phone\"")
@@ -22,10 +22,10 @@ public class Patient {
     public Patient(){
 
     }
-    public Patient(String name, String last_name, String honestly, String phone){
+    public Patient(String name, String last_name, String patronymic, String phone){
         this.name=name;
         this.last_name=last_name;
-        this.honestly=honestly;
+        this.patronymic=patronymic;
         this.phone=phone;
     }
 
@@ -39,8 +39,8 @@ public class Patient {
     public String getLast_name(){
         return last_name;
     }
-    public String getHonestly(){
-        return honestly;
+    public String getPatronymic(){
+        return patronymic;
     }
     public String getPhone(){
         return phone;
@@ -52,14 +52,14 @@ public class Patient {
     public void setLast_name(String last_name){
         this.last_name = last_name;
     }
-    public void setHonestly(String honestly){
-        this.honestly = honestly;
+    public void setPatronymic(String honestly){
+        this.patronymic = honestly;
     }
     public void setPhone(String phone){
         this.phone=phone;
     }
 
     public String toString(){
-        return new String("patient[ "+id+", "+name+", "+last_name+", "+honestly+", "+phone+"]");
+        return new String("patient[ "+id+", "+name+", "+last_name+", "+patronymic+", "+phone+"]");
     }
 }

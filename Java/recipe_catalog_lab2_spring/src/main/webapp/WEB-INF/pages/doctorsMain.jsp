@@ -11,34 +11,39 @@
     <th>id</th>
     <th>Name</th>
     <th>Last name</th>
-    <th>Honestly</th>
+    <th>Patronymic</th>
     <th>Specialization</th>
     </thead>
     <tbody>
     <c:forEach items="${doctors}" var="doctor">
-        <tr>
             <td>${doctor.id}</td>
             <td>${doctor.name}</td>
             <td>${doctor.last_name}</td>
-            <td>${doctor.honestly}</td>
+            <td>${doctor.patronymic}</td>
             <td>${doctor.specialization}</td>
-            <td>
-                <form action="deleteDoctor" method="POST" >
+        <td>
+            <form action="updateDoctorPage" method="POST" >
+                <input type="text"  name="idDoctorUpdate" value="${doctor.id}" hidden="true"/>
+                <input type="submit" value="update"/>
+            </form>
+        </td>
+        <td>
+            <form action="deleteDoctor" method="POST" >
                     <input type="text"  name="id" value="${doctor.id}" hidden="true"/>
                     <input type="submit" value="delete"/>
-                </form>
-            </td>
+            </form>
+        </td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
 <a href="index">Main page</a>
-<form action="createDoctor" method="POST">
+<form action="addDoctor" method="POST">
     Add a doctor <br>
     <div>
         <label>Name</label> <input type="text" name="name"/>
         <label>Last Name</label> <input type="text"name="last_name"/>
-        <label>Honestly</label> <input type="text" name="honestly"/>
+        <label>Patronymic</label> <input type="text" name="patronymic"/>
         <label>Specialization</label> <input type="text" name="specialization"/>
     </div>
     <input type="submit" value="Add"/>

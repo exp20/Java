@@ -1,61 +1,50 @@
 package com.mycomp.services;
-/*
+
+
 
 import com.mycomp.model.dao.PatientDAO;
 import com.mycomp.model.entity.Patient;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+import javax.transaction.Transactional;
 import java.util.List;
 
-
+@Service
 public class PatientServiceImpl implements PatientService {
     private PatientDAO patientDAO;
 
-    @PersistenceContext(unitName = "myUnit") // работа с jpa.
-    private EntityManager entityManager;
+    @Autowired
+    public void setPatientDAO(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
+    }
 
-
-
+    @Transactional
     public long add(Patient patient) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        patientDAO = new PatientDAO(session);
-        Transaction transaction = session.beginTransaction();
-        long id  = patientDAO.add(patient);
-        transaction.commit();
-        return id;
+        return patientDAO.add(patient);
     }
 
+    @Transactional
     public List<Patient> getAll() throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        patientDAO = new PatientDAO(session);
-        return patientDAO.getAll();
+       return patientDAO.getAll();
     }
 
-
+    @Transactional
     public Patient findById(long id) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        patientDAO = new PatientDAO(session);
         return patientDAO.findById(id);
     }
 
-    public void update(Patient doctor) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        patientDAO = new PatientDAO(session);
-        Transaction transaction = session.beginTransaction();
-        patientDAO.update(doctor);
-        transaction.commit();
+    @Transactional
+    public void update(Patient patient) throws Exception {
+        patientDAO.update(patient);
     }
 
-    public void delete(Patient doctor) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        patientDAO = new PatientDAO(session);
-        Transaction transaction = session.beginTransaction();
-        patientDAO.delete(findById(doctor.getId()));
-        transaction.commit();
+    @Transactional
+    public void delete(Patient patient) throws Exception {
+       patientDAO.delete(patientDAO.findById(patient.getId()));
     }
 
-}*/
+}
 

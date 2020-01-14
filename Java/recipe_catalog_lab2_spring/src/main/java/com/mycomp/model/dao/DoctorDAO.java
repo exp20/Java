@@ -20,14 +20,12 @@ public class DoctorDAO implements DoctorDAOInterface {
         this.sessionFactory = sessionFactory;
     }
 
-  /*  public DoctorDAO(Session session){
-        this.session = session;
-    }*/
 
-  /*  @Override
+    @Override
     public long add(Doctor doctor) {
+        Session session = sessionFactory.getCurrentSession();
         return (long)  session.save(doctor); //сохраняем в бд генерируя новый id даже если установлен
-    }*/
+    }
 
     @Override
     public List<Doctor> getAll() {
@@ -35,19 +33,22 @@ public class DoctorDAO implements DoctorDAOInterface {
         List<Doctor> doctors = (List<Doctor>) session.createQuery("from Doctor").list();
         return doctors;
     }
-/*
+
     @Override
     public Doctor findById(long id) {
+        Session session = sessionFactory.getCurrentSession();
        return session.get(Doctor.class,id); //получаем persist(Object)
     }
 
     @Override
     public void update(Doctor doctor) {
+        Session session = sessionFactory.getCurrentSession();
         session.update(doctor);
     }
 
     @Override
     public void delete(Doctor doctor) {
+        Session session = sessionFactory.getCurrentSession();
         session.delete(doctor);
-    }*/
+    }
 }

@@ -15,13 +15,14 @@
 
 <p><p>
 <p>
+<%--
     <c:forEach items="${error_message}" var="er_message">
     <tr>
        <td>${er_essage.getClassName()}
            ${er_message.toString()}
        </td>
     </tr>
-</c:forEach>
+</c:forEach> --%>
 </p>
 <button type="button" name="Back" onclick="history.back()">back</button>
 <p></p>

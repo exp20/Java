@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.print.Doc;
 import java.util.List;
 @Repository
 public class DoctorDAO implements DoctorDAOInterface {
@@ -24,7 +25,9 @@ public class DoctorDAO implements DoctorDAOInterface {
     @Override
     public long add(Doctor doctor) {
         Session session = sessionFactory.getCurrentSession();
-        return (long)  session.save(doctor); //сохраняем в бд генерируя новый id даже если установлен
+        long id = (long) session.save(doctor); //сохраняем в бд генерируя новый id даже если установлен
+        return id;
+
     }
 
     @Override
@@ -37,7 +40,8 @@ public class DoctorDAO implements DoctorDAOInterface {
     @Override
     public Doctor findById(long id) {
         Session session = sessionFactory.getCurrentSession();
-       return session.get(Doctor.class,id); //получаем persist(Object)
+        Doctor found_doc = session.get(Doctor.class,id); //получаем persist(Object)
+       return found_doc;
     }
 
     @Override

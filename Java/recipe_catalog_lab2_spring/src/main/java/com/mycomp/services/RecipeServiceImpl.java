@@ -10,83 +10,78 @@ import com.mycomp.model.entity.Patient;
 import com.mycomp.model.entity.Recipe;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import javax.transaction.Transactional;
 import java.util.List;
 
-/*
+@Service
 public class RecipeServiceImpl implements RecipeService {
     private RecipeDAO recipeDAO;
     private DoctorDAO doctorDAO;
     private PatientDAO patientDAO;
 
 
+    @Autowired
+    public void setDocotrDAO(DoctorDAO docotrDAO) {
+        this.doctorDAO = docotrDAO;
+    }
 
+    @Autowired
+    public void setRecipeDAO(RecipeDAO recipeDAO) {
+        this.recipeDAO = recipeDAO;
+    }
 
+    @Autowired
+    public void setPatientDAO(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
+    }
 
+    /*
+    @Transactional
     public long add(Recipe recipe) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        recipeDAO = new RecipeDAO(session);
-        Transaction transaction = session.beginTransaction();
-        long id  = recipeDAO.add(recipe);
-        transaction.commit();
-        return id;
-    }
+      return recipeDAO.add(recipe);
+    }*/
 
+
+
+    @Transactional
     public List<Recipe> getAll() throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        recipeDAO = new RecipeDAO(session);
-        return recipeDAO.getAll();
+       return recipeDAO.getAll();
     }
 
-
+    @Transactional
     public Recipe findById(long id) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        recipeDAO = new RecipeDAO(session);
-        return recipeDAO.findById(id);
+      return recipeDAO.findById(id);
     }
 
+    @Transactional
     public void update(Recipe recipe) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        recipeDAO = new RecipeDAO(session);
-        Transaction transaction = session.beginTransaction();
-        recipeDAO.update(recipe);
-        transaction.commit();
+       recipeDAO.update(recipe);
+
     }
 
+    @Transactional
     public void delete(Recipe recipe) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        recipeDAO = new RecipeDAO(session);
-        Transaction transaction = session.beginTransaction();
-        recipeDAO.delete(findById(recipe.getId()));
-        transaction.commit();
+       recipeDAO.delete(recipeDAO.findById(recipe.getId()));
     }
 
     @Override
+    @Transactional
     public long add(String doctor_id, String patient_id, String description, String priority) throws Exception{
-        Session session = entityManager.unwrap(Session.class);
-        doctorDAO = new DoctorDAO(session);
-        recipeDAO = new RecipeDAO(session);
-        patientDAO = new PatientDAO(session);
 
         Doctor doctor = doctorDAO.findById(Long.parseLong(doctor_id));
         Patient patient = patientDAO.findById(Long.parseLong(patient_id));
-        Transaction transaction = session.beginTransaction();
         long id  = recipeDAO.add(new Recipe(description,priority, doctor,patient));
-        transaction.commit();
         return id;
     }
 
     @Override
+    @Transactional
     public void delete(long id) throws Exception {
-        Session session = entityManager.unwrap(Session.class);
-        recipeDAO = new RecipeDAO(session);
-        Transaction transaction = session.beginTransaction();
-        recipeDAO.delete(findById(id));
-        transaction.commit();
+        recipeDAO.delete(recipeDAO.findById(id));
     }
 
-}*/
+}

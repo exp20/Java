@@ -1,5 +1,7 @@
 package com.mycomp.model.entity;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,21 +13,24 @@ public class Recipe {
     private long id;
     @Column (name = "\"description\"")
     private String description;
-  //  @Column (name = "\"creation_date\"")
-  //  private Date creation_date;
-  //  @Column (name = "\"validity\"")
-  //  private Date validity;
+
     @Column (name = "\"priority\"")
     private String priority;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="\"doctor_id\"", nullable=false)
     private Doctor doctor;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="\"patient_id\"", nullable=false)
     private Patient patient;
 
+    //  @Column (name = "\"creation_date\"")
+    //  private Date creation_date;
+    //  @Column (name = "\"validity\"")
+    //  private Date validity;
     public Recipe (){
 
     }

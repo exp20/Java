@@ -2,6 +2,7 @@ package com.mycomp.controller;
 
 import com.mycomp.model.entity.Doctor;
 import com.mycomp.model.entity.Patient;
+import com.mycomp.model.entity.Recipe;
 import com.mycomp.services.DoctorService;
 import com.mycomp.services.DoctorServiceImpl;
 import com.mycomp.services.PatientService;
@@ -21,7 +22,7 @@ import javax.swing.text.html.parser.Entity;
 public class MainController {
     private DoctorService doctorService;
     private PatientService patientService;
-    // private RecipeService recipeService;
+    private RecipeService recipeService;
 
     @Autowired
     public void setDoctorService(DoctorService doctorService) {
@@ -33,10 +34,10 @@ public class MainController {
         this.patientService = patientService;
     }
 
-/*    @Autowired
+    @Autowired
     public void setRecipeService(RecipeService recipeService) {
         this.recipeService = recipeService;
-    }*/
+    }
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public ModelAndView watchIndex() {
@@ -65,6 +66,12 @@ public class MainController {
                                   @RequestParam("last_name") String last_name,
                                   @RequestParam("patronymic") String patronymic,
                                   @RequestParam("specialization") String specialization) {
+        if (last_name.length() == 0 || patronymic.length() ==0 || name.length() == 0 || specialization.length() == 0){
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            modelAndView2.addObject("message", "Cannot create a doctor");
+            modelAndView2.addObject("error_message", "Enter fields!");
+            return modelAndView2;
+        }
         Doctor new_doctor = new Doctor(name, last_name, patronymic, specialization);
         try {
             doctorService.add(new_doctor);
@@ -164,6 +171,12 @@ public class MainController {
                                    @RequestParam("patronymic") String patronymic,
                                    @RequestParam("phone") String phone) {
         Patient new_patient = new Patient(name, last_name, patronymic, phone);
+        if (last_name.length() == 0 || patronymic.length() ==0 || name.length() == 0 || phone.length() ==0){
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            modelAndView2.addObject("message", "Cannot create a patient");
+            modelAndView2.addObject("error_message", "Enter fields!");
+            return modelAndView2;
+        }
         try {
             patientService.add(new_patient);
             ModelAndView modelAndView = new ModelAndView("redirect:/patients", model);
@@ -240,7 +253,104 @@ public class MainController {
             }
 
         }
+    }
 
+    @RequestMapping(value = "/recipes", method = RequestMethod.GET)
+    public ModelAndView recipesPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            modelAndView.setViewName("recipesMain");
+            modelAndView.addObject("recipes", recipeService.getAll());
+        } catch (Exception e) {
+            modelAndView.setViewName("errorPage2");
+            // modelAndView.addObject("message",e.getStackTrace());
+            modelAndView.addObject("err", e);
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/addRecipe", method = RequestMethod.POST)
+    public ModelAndView addRecipe(ModelMap model, @RequestParam("doctor_id") String doctor_id,
+                                  @RequestParam("patient_id") String patient_id,
+                                  @RequestParam("description") String description,
+                                  @RequestParam("priority") String priority) {
+
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/recipes", model);
+        if (description.length() == 0 ||priority.length() ==0){
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            modelAndView2.addObject("message", "Cannot create a recipes");
+            modelAndView2.addObject("error_message", "Enter fields!");
+            return modelAndView2;
+        }
+        try {
+            recipeService.add(doctor_id, patient_id, description, priority);
+            return modelAndView;
+        } catch (Exception e) {
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            modelAndView2.addObject("message", "Cannot create a recipe. Check doctor id, patient id");
+            modelAndView2.addObject("error_message", e.toString());
+            return modelAndView2;
+        }
+    }
+
+    @RequestMapping(value = {"/updateRecipePage"}, method = RequestMethod.POST)
+    public ModelAndView updateRecipePage(ModelMap model,
+                                          @RequestParam("idRecipeUpdate") long id) {
+
+        ModelAndView modelAndView = new ModelAndView("updateRecipePage", model);
+        try {
+            modelAndView.addObject(recipeService.findById(id));
+            return modelAndView;
+        } catch (Exception e) {
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            modelAndView2.addObject("message", "Cannot update a recipe");
+            modelAndView2.addObject("error_message", e.toString());
+            return modelAndView2;
+        }
+    }
+
+    @RequestMapping(value = {"/updateRecipe"}, method = RequestMethod.POST)
+    public ModelAndView updateRecipe(ModelMap model,
+                                      @RequestParam("id") long id,
+                                     @RequestParam("doctor_id") long doctor_id,
+                                     @RequestParam("patient_id") long patient_id,
+                                      @RequestParam("description") String description,
+                                      @RequestParam("priority") String priority)
+                                       {
+
+        try {
+            Recipe old_recipe = recipeService.findById(id);
+
+            old_recipe.setPriority(priority);
+            old_recipe.setDescription(description);
+            recipeService.update(old_recipe);
+            ModelAndView modelAndView = new ModelAndView("redirect:/recipes", model);
+            return modelAndView;
+        } catch (Exception e) {
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            modelAndView2.addObject("message", "Cannot update a recipe");
+            modelAndView2.addObject("error_message", e.toString());
+            return modelAndView2;
+        }
 
     }
-}
+
+
+    @RequestMapping(value = "/deleteRecipe", method = RequestMethod.POST)
+    public ModelAndView deleteRecipe(ModelMap model, @RequestParam("id") long id) {
+
+        try {
+            ModelAndView modelAndView = new ModelAndView("redirect:/recipes", model);
+            recipeService.delete(recipeService.findById(id));
+            return modelAndView;
+        } catch (Exception e) {
+            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+                modelAndView2.addObject("message", "Cannot delete a recipe");
+                modelAndView2.addObject("error_message", e);
+                return modelAndView2;
+            }
+
+        }
+    }
+

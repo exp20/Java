@@ -23,13 +23,13 @@
         out.println("<br>" + elem.getMessage());
     }*/
 
-    for(StackTraceElement elem : pageContext.getException().getStackTrace()){
+  /*  for(StackTraceElement elem : pageContext.getException().getStackTrace()){
         out.println("<br>" + elem.toString());
     }
 
    // out.println(pageContext.getException().getCause().getMessage());
     out.println("<p><p>");
-
+*/
   //  pageContext.getException().printStackTrace(new java.io.PrintWriter(out));
 %>
 

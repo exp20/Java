@@ -1,22 +1,38 @@
 package com.mycomp.model.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
-@Entity
+@Entity (name = "Patient")
 @Table (name = "\"patients\"", schema = "\"PUBLIC\"")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Patient {
+
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     @Column (name = "\"id\"")
+    @XmlElement
     private long id;
+
     @Column (name = "\"name\"")
+    @XmlElement
     private String name;
+
     @Column (name = "\"patronymic\"")
+    @XmlElement
     private String patronymic;
+
     @Column (name = "\"last_name\"")
+    @XmlElement
     private String last_name;
+
     @Column (name = "\"phone\"")
+    @XmlElement
     private String phone;
 
     public Patient(){

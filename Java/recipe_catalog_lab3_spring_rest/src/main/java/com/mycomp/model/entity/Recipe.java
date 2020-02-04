@@ -1,28 +1,40 @@
 package com.mycomp.model.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table (name = "\"recipes\"",schema = "\"PUBLIC\"")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Recipe {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column (name = "\"id\"")
+    @XmlElement
     private long id;
+
     @Column (name = "\"description\"")
+    @XmlElement
     private String description;
 
     @Column (name = "\"priority\"")
+    @XmlElement
     private String priority;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="\"doctor_id\"", nullable=false)
+    @XmlElement
     private Doctor doctor;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="\"patient_id\"", nullable=false)
+    @XmlElement
     private Patient patient;
 
     //  @Column (name = "\"creation_date\"")

@@ -1,8 +1,6 @@
 package com.mycomp.controller;
 
-import com.mycomp.model.entity.Doctor;
-import com.mycomp.model.entity.Patient;
-import com.mycomp.model.entity.Recipe;
+import com.mycomp.model.entity.*;
 import com.mycomp.services.DoctorService;
 import com.mycomp.services.PatientService;
 import com.mycomp.services.RecipeService;
@@ -61,10 +59,9 @@ public class RestAppController {
     // http://localhost:8080/lab3_war/doctors.xml
     // http://localhost:8080/lab3_war/doctors.json
     @RequestMapping(value = "/rest/doctors", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity doctorsPage() {
+    public ResponseEntity<DoctorList> doctorsPage() {
         try {
-
-            return new ResponseEntity<>(doctorService.getAll(), HttpStatus.OK);
+            return new ResponseEntity(new DoctorList(doctorService.getAll()), HttpStatus.OK);
         } catch (Exception e) {
 
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -172,12 +169,12 @@ public class RestAppController {
     }
 
     @RequestMapping(value = "/rest/patients", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity patientsPage() {
+    public ResponseEntity<PatientList> patientsPage() {
         try {
-            return new ResponseEntity<>(patientService.getAll(), HttpStatus.OK);
+            return new ResponseEntity(new PatientList(patientService.getAll()), HttpStatus.OK);
         } catch (Exception e) {
 
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -276,9 +273,9 @@ public class RestAppController {
 
 
     @RequestMapping(value = "/rest/recipes", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity recipesPage() {
+    public ResponseEntity<RecipeList> recipesPage() {
         try {
-            return new ResponseEntity(recipeService.getAll(), HttpStatus.OK);
+            return new ResponseEntity(new RecipeList(recipeService.getAll()), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }

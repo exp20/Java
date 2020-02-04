@@ -10,33 +10,34 @@ import java.io.Serializable;
 
 @Entity (name = "Doctor")
 @Table(name = "\"doctors\"", schema = "\"PUBLIC\"")
-
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Doctor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "\"id\"")
-
+    @XmlElement
     private long id;
 
 
     @Column (name = "\"name\"")
-
+    @XmlElement
     private String name;
 
 
     @Column (name = "\"last_name\"")
-
+    @XmlElement
     private String last_name;
 
 
     @Column (name = "\"patronymic\"")
-
+    @XmlElement
     private String patronymic;
 
 
     @Column (name = "\"specialization\"")
-
+    @XmlElement
     private String specialization;
 
 

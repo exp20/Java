@@ -39,7 +39,7 @@ public class MainController {
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public ModelAndView watchIndex() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
+        modelAndView.setViewName("jsp/index");
         return modelAndView;
     }
 
@@ -47,11 +47,11 @@ public class MainController {
     public ModelAndView doctorsPage() {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            modelAndView.setViewName("doctorsMain");
+            modelAndView.setViewName("jsp/doctorsMain");
             modelAndView.addObject("doctors", doctorService.getAll());
         } catch (Exception e) {
 
-            modelAndView.setViewName("errorPage2");
+            modelAndView.setViewName("jsp/errorPage2");
             // modelAndView.addObject("message",e.getStackTrace());
             modelAndView.addObject("err", e);
         }
@@ -64,7 +64,7 @@ public class MainController {
                                   @RequestParam("patronymic") String patronymic,
                                   @RequestParam("specialization") String specialization) {
         if (last_name.length() == 0 || patronymic.length() ==0 || name.length() == 0 || specialization.length() == 0){
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot create a doctor");
             modelAndView2.addObject("error_message", "Enter fields!");
             return modelAndView2;
@@ -75,7 +75,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/doctors", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot create a doctor");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -86,12 +86,12 @@ public class MainController {
     public ModelAndView updateDoctorPage(ModelMap model,
                                          @RequestParam("idDoctorUpdate") long id) {
 
-        ModelAndView modelAndView = new ModelAndView("updateDoctorPage", model);
+        ModelAndView modelAndView = new ModelAndView("jsp/updateDoctorPage", model);
         try {
             modelAndView.addObject(doctorService.findById(id));
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot update a doctor");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -115,7 +115,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/doctors", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot update a doctor");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -131,7 +131,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/doctors", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             Throwable t = e.getCause();
             while ((t != null) && !(t instanceof ConstraintViolationException)) {
                 t = t.getCause();
@@ -152,10 +152,10 @@ public class MainController {
     public ModelAndView patientsPage() {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            modelAndView.setViewName("patientsMain");
+            modelAndView.setViewName("jsp/patientsMain");
             modelAndView.addObject("patients", patientService.getAll());
         } catch (Exception e) {
-            modelAndView.setViewName("errorPage2");
+            modelAndView.setViewName("jsp/errorPage2");
             // modelAndView.addObject("message",e.getStackTrace());
             modelAndView.addObject("message", e);
         }
@@ -169,7 +169,7 @@ public class MainController {
                                    @RequestParam("phone") String phone) {
         Patient new_patient = new Patient(name, last_name, patronymic, phone);
         if (last_name.length() == 0 || patronymic.length() ==0 || name.length() == 0 || phone.length() ==0){
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot create a patient");
             modelAndView2.addObject("error_message", "Enter fields!");
             return modelAndView2;
@@ -179,7 +179,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/patients", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot create a patient");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -190,12 +190,12 @@ public class MainController {
     public ModelAndView updatePatientPage(ModelMap model,
                                           @RequestParam("idPatientUpdate") long id) {
 
-        ModelAndView modelAndView = new ModelAndView("updatePatientPage", model);
+        ModelAndView modelAndView = new ModelAndView("jsp/updatePatientPage", model);
         try {
             modelAndView.addObject(patientService.findById(id));
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot update a patient");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -219,7 +219,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/patients", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot update a patient");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -234,7 +234,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/patients", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             Throwable t = e.getCause();
             while ((t != null) && !(t instanceof ConstraintViolationException)) {
                 t = t.getCause();
@@ -256,10 +256,10 @@ public class MainController {
     public ModelAndView recipesPage() {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            modelAndView.setViewName("recipesMain");
+            modelAndView.setViewName("jsp/recipesMain");
             modelAndView.addObject("recipes", recipeService.getAll());
         } catch (Exception e) {
-            modelAndView.setViewName("errorPage2");
+            modelAndView.setViewName("jsp/errorPage2");
             // modelAndView.addObject("message",e.getStackTrace());
             modelAndView.addObject("err", e);
         }
@@ -275,7 +275,7 @@ public class MainController {
 
         ModelAndView modelAndView = new ModelAndView("redirect:/recipes", model);
         if (description.length() == 0 ||priority.length() ==0){
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot create a recipes");
             modelAndView2.addObject("error_message", "Enter fields!");
             return modelAndView2;
@@ -284,7 +284,7 @@ public class MainController {
             recipeService.add(doctor_id, patient_id, description, priority);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot create a recipe. Check doctor id, patient id");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -295,12 +295,12 @@ public class MainController {
     public ModelAndView updateRecipePage(ModelMap model,
                                           @RequestParam("idRecipeUpdate") long id) {
 
-        ModelAndView modelAndView = new ModelAndView("updateRecipePage", model);
+        ModelAndView modelAndView = new ModelAndView("jsp/updateRecipePage", model);
         try {
             modelAndView.addObject(recipeService.findById(id));
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot update a recipe");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -325,7 +325,7 @@ public class MainController {
             ModelAndView modelAndView = new ModelAndView("redirect:/recipes", model);
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
             modelAndView2.addObject("message", "Cannot update a recipe");
             modelAndView2.addObject("error_message", e.toString());
             return modelAndView2;
@@ -342,7 +342,7 @@ public class MainController {
             recipeService.delete(recipeService.findById(id));
             return modelAndView;
         } catch (Exception e) {
-            ModelAndView modelAndView2 = new ModelAndView("errorPage2", model);
+            ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);
                 modelAndView2.addObject("message", "Cannot delete a recipe");
                 modelAndView2.addObject("error_message", e);
                 return modelAndView2;

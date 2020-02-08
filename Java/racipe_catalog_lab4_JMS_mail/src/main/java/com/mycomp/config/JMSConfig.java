@@ -39,7 +39,7 @@ public class JMSConfig {
         template.setConnectionFactory(connectionFactory());
         template.setPubSubDomain(true); // для работы с topic
         //утсановка места назначения для отправки и приема по умалчанию
-      // Destination defaultDestination = new ActiveMQTopic("my_topic");
+       Destination defaultDestination = new ActiveMQTopic("my_topic");
       // template.setDefaultDestination(defaultDestination);
 
         return template;

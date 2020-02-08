@@ -24,20 +24,18 @@ public class ReceiveMessage {
     JmsTemplate jmsTemplate;
 
 
-        @Autowired
+    @Autowired
     public void setHistoryService(HistoryService historyService) {
 
         this.historyService = historyService;
     }
 
     @JmsListener(destination = "my_topic")
-    public void receiveMessage(Message message) throws JMSException {
-        //System.out.println(message);
-        ObjectMessage objectMessage = (ObjectMessage) message;
-        System.out.println(objectMessage);
-        History h1 =  (History) jmsTemplate.receive("my_topic");
-        System.out.println(h1);
-        if(objectMessage.getObject() instanceof History) {
+    public void receiveMessage(ObjectMessage objectMessage) throws JMSException {
+
+        Object object = ((ObjectMessage) objectMessage).getObject();
+        System.out.println(object);
+        if (objectMessage.getObject() instanceof History) {
             History history = (History) objectMessage.getObject();
             try {
                 historyService.add(history);
@@ -45,6 +43,16 @@ public class ReceiveMessage {
                 System.out.println(e.toString());
             }
         }
+       /* ObjectMessage objectMessage = (ObjectMessage) message;
+        System.out.println(objectMessage);*
+        if(objectMessage.getObject() instanceof History) {
+            History history = (History) objectMessage.getObject();
+            try {
+                historyService.add(history);
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }*/
 
     }
 }

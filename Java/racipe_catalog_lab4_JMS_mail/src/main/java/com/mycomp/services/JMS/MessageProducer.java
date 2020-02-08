@@ -18,13 +18,13 @@ public class MessageProducer {
     JmsTemplate jmsTemplate;
 
     public void sendMessage(History history) {
-        jmsTemplate.convertAndSend("my_topic",history);
-       /* jmsTemplate.send("my_topic", new MessageCreator() {
-                    public Message createMessage(Session session) throws JMSException {
+        //jmsTemplate.convertAndSend("my_topic",history);
+        jmsTemplate.send("my_topic", new MessageCreator() {
+                    public ObjectMessage createMessage(Session session) throws JMSException {
                         ObjectMessage objectMessage = session.createObjectMessage(history);
                         return objectMessage;
                     }
                 }
-        );*/
+        );
     }
 }

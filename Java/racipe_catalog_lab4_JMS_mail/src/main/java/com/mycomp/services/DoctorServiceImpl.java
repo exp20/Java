@@ -4,7 +4,7 @@ package com.mycomp.services;
 import com.mycomp.model.dao.DoctorDAO;
 import com.mycomp.model.entity.Doctor;
 import com.mycomp.model.entity.History;
-import com.mycomp.services.JMS.ObjectMessageProducer;
+import com.mycomp.services.JMS.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -26,10 +26,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Autowired
-    private JmsTemplate template;
+    private MessageProducer messageProducer;
 
-    @Autowired
-    private ObjectMessageProducer objectMessageProducer;
 
 
     @Override
@@ -41,10 +39,8 @@ public class DoctorServiceImpl implements DoctorService {
     public long add(Doctor doctor) throws Exception {
       //  template.send(new EmailMessageCreator(new EmailHistory("79372009578@yandex.ru", "Name equals to Sergei. Teacher has been inserted.")));
         long id = doctorDAO.add(doctor);
-        //template.send(new Producer(new History(Long.toString(id), "Insert", doctor.getClass().getName())));
-        //template.convertAndSend(new History(Long.toString(id), "Insert", doctor.getClass().getName()));
-        objectMessageProducer.sendMessage(new History(Long.toString(id), "Insert", doctor.getClass().getName()));
-        return id;
+        messageProducer.sendMessage(new History(Long.toString(id), "Insert", doctor.getClass().getName()));
+    return id;
     }
 
     @Transactional

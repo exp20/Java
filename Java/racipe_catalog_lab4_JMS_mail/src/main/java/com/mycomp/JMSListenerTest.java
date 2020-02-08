@@ -1,8 +1,7 @@
 package com.mycomp;
 
 
-
-/**
+/*
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
@@ -20,7 +19,7 @@ public class JMSListenerTest {
     @Autowired
     private JMSProducerTest producer;
 
-    @JmsListener(destination = "inbound.queue")
+   @JmsListener(destination = "inbound.queue")
     public void receiveMessage(final Message jsonMessage) throws JMSException {
         String messageData = null;
         System.out.println("Received message " + jsonMessage);

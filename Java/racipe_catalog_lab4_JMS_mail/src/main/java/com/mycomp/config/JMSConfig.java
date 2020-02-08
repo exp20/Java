@@ -39,8 +39,8 @@ public class JMSConfig {
         template.setConnectionFactory(connectionFactory());
         template.setPubSubDomain(true); // для работы с topic
         //утсановка места назначения для отправки и приема по умалчанию
-       Destination defaultDestination = new ActiveMQTopic("my_topic");
-       template.setDefaultDestination(defaultDestination);
+      // Destination defaultDestination = new ActiveMQTopic("my_topic");
+      // template.setDefaultDestination(defaultDestination);
 
         return template;
     }
@@ -52,7 +52,6 @@ public class JMSConfig {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory());
         factory.setConcurrency("1-1");
-
         factory.setPubSubDomain(true); // для работы с topic
         return factory;
     }

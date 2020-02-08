@@ -130,6 +130,7 @@
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
     <!-- реализует jms -->
+
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-broker</artifactId>

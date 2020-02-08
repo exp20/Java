@@ -3,8 +3,12 @@ package com.mycomp.services;
 
 import com.mycomp.model.dao.DoctorDAO;
 import com.mycomp.model.entity.Doctor;
+import com.mycomp.model.entity.History;
+import com.mycomp.services.JMS.ObjectMessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -17,9 +21,16 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     @Autowired
-    public void setDocotrDAO(DoctorDAO docotrDAO) {
-    this.doctorDAO = docotrDAO;
+    public void setDoctorDAO(DoctorDAO doctorDAO) {
+    this.doctorDAO = doctorDAO;
     }
+
+    @Autowired
+    private JmsTemplate template;
+
+    @Autowired
+    private ObjectMessageProducer objectMessageProducer;
+
 
     @Override
     @Transactional
@@ -28,7 +39,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
     @Transactional
     public long add(Doctor doctor) throws Exception {
-        return doctorDAO.add(doctor);
+      //  template.send(new EmailMessageCreator(new EmailHistory("79372009578@yandex.ru", "Name equals to Sergei. Teacher has been inserted.")));
+        long id = doctorDAO.add(doctor);
+        //template.send(new Producer(new History(Long.toString(id), "Insert", doctor.getClass().getName())));
+        //template.convertAndSend(new History(Long.toString(id), "Insert", doctor.getClass().getName()));
+        objectMessageProducer.sendMessage(new History(Long.toString(id), "Insert", doctor.getClass().getName()));
+        return id;
     }
 
     @Transactional

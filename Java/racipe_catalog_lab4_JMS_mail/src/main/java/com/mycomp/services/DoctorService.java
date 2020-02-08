@@ -2,9 +2,9 @@ package com.mycomp.services;
 
 
 
-import com.mycomp.model.entity.Doctor;
+        import com.mycomp.model.entity.Doctor;
 
-import java.util.List;
+        import java.util.List;
 
 
 public interface DoctorService {
@@ -13,9 +13,9 @@ public interface DoctorService {
 
     public List<Doctor> getAll() throws Exception;
 
-   public Doctor findById(long id) throws Exception;
+    public Doctor findById(long id) throws Exception;
 
     public void update(Doctor doctor) throws Exception;
 
-   public void delete(Doctor doctor) throws Exception;
+    public void delete(Doctor doctor) throws Exception;
 }

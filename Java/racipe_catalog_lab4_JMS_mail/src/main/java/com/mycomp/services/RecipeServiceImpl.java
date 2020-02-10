@@ -4,9 +4,8 @@ package com.mycomp.services;
 import com.mycomp.model.dao.DoctorDAO;
 import com.mycomp.model.dao.PatientDAO;
 import com.mycomp.model.dao.RecipeDAO;
-import com.mycomp.model.entity.Doctor;
-import com.mycomp.model.entity.Patient;
-import com.mycomp.model.entity.Recipe;
+import com.mycomp.model.entity.*;
+import com.mycomp.services.JMS.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,15 @@ public class RecipeServiceImpl implements RecipeService {
     private RecipeDAO recipeDAO;
     private DoctorDAO doctorDAO;
     private PatientDAO patientDAO;
+    private MessageProducer messageProducer;
 
+    private String EMAIL = "an.test.lab.mail@yandex.ru";
+
+
+    @Autowired
+    public void setMessageProducer(MessageProducer  messageProducer) {
+        this.messageProducer = messageProducer;
+    }
 
     @Autowired
     public void setDocotrDAO(DoctorDAO docotrDAO) {
@@ -42,7 +49,6 @@ public class RecipeServiceImpl implements RecipeService {
     }*/
 
 
-
     @Transactional
     public List<Recipe> getAll() throws Exception {
        return recipeDAO.getAll();
@@ -56,12 +62,19 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public void update(Recipe recipe) throws Exception {
        recipeDAO.update(recipe);
+       messageProducer.sendMessage(new History(Long.toString(recipe.getId()), "Update", recipe.getClass().getName()));
 
     }
 
     @Transactional
     public void delete(Recipe recipe) throws Exception {
-       recipeDAO.delete(recipeDAO.findById(recipe.getId()));
+        String descript = recipe.getDescription(); // сохраняем поля для проверки на Email
+        String id = Long.toString(recipe.getId());
+        recipeDAO.delete(recipe);
+        messageProducer.sendMessage(new History(id, "Delete", recipe.getClass().getName()));
+        if (descript.equals("Email") || descript.equals("email")){
+            messageProducer.sendMessage(new EmailHistory(EMAIL,"Email notification!  Recipe " + id +" has been deleted"));
+        }
     }
 
     @Override
@@ -70,14 +83,26 @@ public class RecipeServiceImpl implements RecipeService {
 
         Doctor doctor = doctorDAO.findById(Long.parseLong(doctor_id));
         Patient patient = patientDAO.findById(Long.parseLong(patient_id));
-        long id  = recipeDAO.add(new Recipe(description,priority, doctor,patient));
+        Recipe new_recipe  = new Recipe(description,priority, doctor,patient);
+        long id  = recipeDAO.add(new_recipe);
+        messageProducer.sendMessage(new History(Long.toString(id), "Insert", new_recipe.getClass().getName()));
+        if (description.equals("Email") || description.equals("email")){
+            messageProducer.sendMessage(new EmailHistory(EMAIL,"Email notification!  Recipe " + id +" has been inserted"));
+        }
         return id;
     }
 
     @Override
     @Transactional
     public void delete(long id) throws Exception {
-        recipeDAO.delete(recipeDAO.findById(id));
+        Recipe delete_r = (recipeDAO.findById(id));
+        String descript = delete_r.getDescription(); // сохраняем поля для проверки на Email
+        recipeDAO.delete(delete_r);
+        messageProducer.sendMessage(new History(Long.toString(id), "Delete", delete_r.getClass().getName()));
+        if (descript.equals("Email") || descript.equals("email")){
+            messageProducer.sendMessage(new EmailHistory(EMAIL,"Email notification!  Recipe " + id +" has been deleted"));
+        }
     }
+
 
 }

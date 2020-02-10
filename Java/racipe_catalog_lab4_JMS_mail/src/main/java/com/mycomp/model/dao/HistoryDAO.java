@@ -44,11 +44,11 @@ public class HistoryDAO implements HistoryDAOInterface {
         return history;
     }
 
-    @Override
+  /*  @Override
     public void update(History history) {
         Session session = sessionFactory.getCurrentSession();
         session.update(history);
-    }
+    }*/
 
     @Override
     public void delete(History history) {

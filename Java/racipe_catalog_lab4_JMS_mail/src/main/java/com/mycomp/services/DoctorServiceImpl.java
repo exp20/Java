@@ -3,11 +3,13 @@ package com.mycomp.services;
 
 import com.mycomp.model.dao.DoctorDAO;
 import com.mycomp.model.entity.Doctor;
+import com.mycomp.model.entity.EmailHistory;
 import com.mycomp.model.entity.History;
 import com.mycomp.services.JMS.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+
 
 
 import javax.transaction.Transactional;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
+
+    private String EMAIL = "an.test.lab.mail@yandex.ru";
 
     private DoctorDAO doctorDAO;
 
@@ -40,6 +44,9 @@ public class DoctorServiceImpl implements DoctorService {
       //  template.send(new EmailMessageCreator(new EmailHistory("79372009578@yandex.ru", "Name equals to Sergei. Teacher has been inserted.")));
         long id = doctorDAO.add(doctor);
         messageProducer.sendMessage(new History(Long.toString(id), "Insert", doctor.getClass().getName()));
+        if (doctor.getName().equals("Email") || doctor.getName().equals("email")){
+            messageProducer.sendMessage(new EmailHistory(EMAIL,"Email notification!  Doctor " + id + " has been inserted"));
+        }
     return id;
     }
 
@@ -50,6 +57,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public void update(Doctor doctor) throws Exception {
        doctorDAO.update(doctor);
+       messageProducer.sendMessage(new History(Long.toString(doctor.getId()), "Update", doctor.getClass().getName()));
     }
     @Transactional
     public void delete(Doctor doctor) throws Exception {
@@ -58,6 +66,10 @@ public class DoctorServiceImpl implements DoctorService {
 
         Doctor delete_d = findById(doctor.getId());
         doctorDAO.delete(delete_d);
+        messageProducer.sendMessage(new History(Long.toString(delete_d.getId()), "Delete", doctor.getClass().getName()));
+        if (doctor.getName().equals("Email") || doctor.getName().equals("email")){
+            messageProducer.sendMessage(new EmailHistory(EMAIL,"Email notification!  Doctor " + delete_d.getId() +" has been deleted"));
+        }
     }
 /*
     //возвращает количество рецептов у соответствующего доктора

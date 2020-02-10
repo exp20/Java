@@ -65,6 +65,6 @@ public class History implements Serializable {
 
     @Override
     public String toString() {
-        return "Changed entity " + changeEntity + " changed value " + value + " changed action" + changeType;
+        return "Changed entity " + changeEntity + " changed value " + value + " changed action " + changeType;
     }
 }

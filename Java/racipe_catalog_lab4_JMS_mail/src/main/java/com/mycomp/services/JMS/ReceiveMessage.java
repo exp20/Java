@@ -1,16 +1,12 @@
 package com.mycomp.services.JMS;
 
-import com.mycomp.config.JMSConfig;
-import com.mycomp.model.dao.DoctorDAO;
+import com.google.gson.Gson;
 import com.mycomp.model.entity.History;
 import com.mycomp.services.HistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.listener.SessionAwareMessageListener;
-import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
+
 
 import javax.jms.*;
 
@@ -18,41 +14,20 @@ import javax.jms.*;
 @Component
 public class ReceiveMessage {
 
+    @Autowired
     private HistoryService historyService;
 
-    @Autowired
-    JmsTemplate jmsTemplate;
 
-
-    @Autowired
-    public void setHistoryService(HistoryService historyService) {
-
-        this.historyService = historyService;
+ @JmsListener(destination = "history_message")
+ public void receive(TextMessage textMessage) throws JMSException {
+    try {
+        History history = (History) new Gson().fromJson(textMessage.getText(), History.class);
+        historyService.add(history);
+        System.out.println("Receive history: "+history);
+    }
+    catch (Exception e) {
+        e.printStackTrace();
     }
 
-    @JmsListener(destination = "my_topic")
-    public void receiveMessage(ObjectMessage objectMessage) throws JMSException {
-
-        Object object = ((ObjectMessage) objectMessage).getObject();
-        System.out.println(object);
-        if (objectMessage.getObject() instanceof History) {
-            History history = (History) objectMessage.getObject();
-            try {
-                historyService.add(history);
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-        }
-       /* ObjectMessage objectMessage = (ObjectMessage) message;
-        System.out.println(objectMessage);*
-        if(objectMessage.getObject() instanceof History) {
-            History history = (History) objectMessage.getObject();
-            try {
-                historyService.add(history);
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-        }*/
-
-    }
+ }
 }

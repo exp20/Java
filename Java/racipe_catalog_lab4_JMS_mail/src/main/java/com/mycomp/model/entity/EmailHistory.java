@@ -47,4 +47,9 @@ public class EmailHistory implements Serializable {
     public void setCondition(String condition) {
         this.condition = condition;
     }
+
+    @Override
+    public String toString() {
+        return "Email history: email: " + email + " condition: " + condition;
+    }
 }

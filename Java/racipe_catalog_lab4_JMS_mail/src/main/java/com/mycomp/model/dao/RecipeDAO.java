@@ -50,6 +50,8 @@ public class RecipeDAO implements RecipeDAOInterface {
     @Override
     public void delete(Recipe recipe) {
         Session session = sessionFactory.getCurrentSession();
+        session.refresh(recipe.getPatient());
+        session.refresh(recipe.getDoctor());
         session.delete(recipe);
     }
 

@@ -9,7 +9,7 @@ public interface HistoryDAOInterface {
     long add(History doctor);
     List<History> getAll();
     History findById(long id);
-    void update(History doctor);
+ //   void update(History doctor);
     void delete(History doctor);
 }
 

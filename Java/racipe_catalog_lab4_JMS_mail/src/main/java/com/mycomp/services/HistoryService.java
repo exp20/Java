@@ -13,7 +13,7 @@ public interface HistoryService{
 
     public History findById(long id) throws Exception;
 
-    public void update(History history) throws Exception;
+ //   public void update(History history) throws Exception;
 
     public void delete(History history) throws Exception;
 }

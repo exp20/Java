@@ -340,7 +340,9 @@ public class MainController {
 
         try {
             ModelAndView modelAndView = new ModelAndView("redirect:/recipes", model);
-            recipeService.delete(recipeService.findById(id));
+           // recipeService.delete(recipeService.findById(id)); разные контексты и по ссылку объект лучше не передавать
+            // или передовать но снова обновлять свзяь с hibernate
+            recipeService.delete(id);
             return modelAndView;
         } catch (Exception e) {
             ModelAndView modelAndView2 = new ModelAndView("jsp/errorPage2", model);

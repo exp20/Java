@@ -1,19 +1,30 @@
 package com.mycomp.model.entity;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @Entity(name = "EmailHistory")
 @Table(name = "EMAILHISTORY", schema = "\"PUBLIC\"")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class EmailHistory implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement
     private long id;
 
+
     @Column
+    @XmlElement
     private String email;
 
     @Column
+    @XmlElement
     private String condition;
 
     public EmailHistory(){

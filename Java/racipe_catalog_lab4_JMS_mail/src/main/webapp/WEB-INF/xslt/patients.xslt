@@ -5,8 +5,10 @@
     <xsl:template match="/patientsList">
         <html>
             <body>
-                <a href="/lab3_war/xslt/doctors">Doctors</a><br/>
-                <a href="/lab3_war/xslt/recipes">Recipes</a><br/>
+                <a href="/lab4_war/xslt/recipes">Recipes</a><br/>
+                <a href="/lab4_war/xslt/doctors">Doctors</a><br/>
+                <a href="/lab4_war/xslt/history">History</a><br/>
+                <a href="/lab4_war/xslt/email_history">Email history</a><br/>
                 <table align="center">
                     <thead>
                         <th>Id</th>

@@ -5,15 +5,16 @@
     <xsl:template match="/doctorsList">
         <html>
             <body>
-                <a href="/lab3_war/xslt/patients">Patients</a><br/>
-                <a href="/lab3_war/xslt/recipes">Recipes</a><br/>
+                <a href="/lab4_war/xslt/patients">Patients</a><br/>
+                <a href="/lab4_war/xslt/recipes">Recipes</a><br/>
+                <a href="/lab4_war/xslt/history">History</a><br/>
+                <a href="/lab4_war/xslt/email_history">Email history</a><br/>
                 <table align="center">
                     <thead>
                         <th>id</th>
                         <th>Name</th>
                         <th>Last_name</th>
-                        <th>patronymic</th>
-                        <th>specialization</th>
+                        <th>Patronymic</th>
                     </thead>
                     <tbody>
                         <xsl:for-each select="doctor">
@@ -22,7 +23,6 @@
                                 <td><xsl:value-of select="name"/></td>
                                 <td><xsl:value-of select="last_name"/></td>
                                 <td><xsl:value-of select="patronymic"/></td>
-                                <td><xsl:value-of select="specialization"/></td>
                             </tr>
                         </xsl:for-each>
                     </tbody>

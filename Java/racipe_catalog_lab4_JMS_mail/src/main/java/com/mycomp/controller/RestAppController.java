@@ -1,9 +1,7 @@
 package com.mycomp.controller;
 
 import com.mycomp.model.entity.*;
-import com.mycomp.services.DoctorService;
-import com.mycomp.services.PatientService;
-import com.mycomp.services.RecipeService;
+import com.mycomp.services.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +14,8 @@ public class RestAppController {
     private DoctorService doctorService;
     private PatientService patientService;
     private RecipeService recipeService;
+
+
 
 
     @Autowired
@@ -32,6 +32,12 @@ public class RestAppController {
     public void setRecipeService(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
+
+    @Autowired
+    HistoryService historyService;
+
+    @Autowired
+    EmailHistoryService emailHistoryService;
 /*
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public ModelAndView watchIndex() {
@@ -365,6 +371,28 @@ public class RestAppController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/rest/history", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<HistoryList> HistoryPage() {
+        try {
+            return new ResponseEntity(new HistoryList(historyService.getAll()), HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+    @RequestMapping(value = "/rest/email_history", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<EmailHistoryList> EmailHistoryPage() {
+        try {
+            return new ResponseEntity(new EmailHistoryList(emailHistoryService.getAll()), HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 }

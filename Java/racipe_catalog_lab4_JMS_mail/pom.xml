@@ -67,6 +67,8 @@
   </build>
 
 
+  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+
 
   <dependencies>
     <dependency>
@@ -155,18 +157,21 @@
       <version>2.6.2</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
-
+<!--
      <dependency>
        <groupId>com.fasterxml.jackson.dataformat</groupId>
        <artifactId>jackson-dataformat-xml</artifactId>
        <version>2.9.4</version>
      </dependency>
+     -->
   <!-- тут поддрежка javaMailSender есть-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
       <version>5.0.1.RELEASE</version>
     </dependency>
+
   </dependencies>
+
 
 </project>

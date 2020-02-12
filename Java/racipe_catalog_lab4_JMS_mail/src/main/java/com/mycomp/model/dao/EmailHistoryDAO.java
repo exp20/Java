@@ -25,7 +25,7 @@ public class EmailHistoryDAO implements EmailHistoryDAOInterface {
     @Override
     public List<EmailHistory> getAll() {
         Session session = sessionFactory.getCurrentSession();
-        List<EmailHistory> doctors = (List<EmailHistory>) session.createQuery("from History").list();
+        List<EmailHistory> doctors = (List<EmailHistory>) session.createQuery("from EmailHistory").list();
         return doctors;
     }
 

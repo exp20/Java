@@ -2,23 +2,32 @@ package com.mycomp.model.entity;
 
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 
 @Entity (name = "History")
 @Table(name = "HISTORY", schema = "PUBLIC")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class History implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
+    @XmlElement
     private long id;
-
+    @XmlElement
     @Column(name = "CHANGETYPE")
     private String changeType;
 
+    @XmlElement
     @Column(name = "CHANGEENTITY")
     private String changeEntity;
 
+    @XmlElement
     @Column(name = "VALUE")
     private String value;
 

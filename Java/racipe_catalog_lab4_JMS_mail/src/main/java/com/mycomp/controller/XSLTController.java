@@ -39,13 +39,22 @@ public class XSLTController {
     }
 
     @RequestMapping(value = "/xslt/patients", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<String> watchLessons() throws TransformerException {
+    public ResponseEntity<String> watchPatients() throws TransformerException {
         return watchEntities("patients");
     }
 
     @RequestMapping(value = "/xslt/recipes", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<String> watchTeachers() throws TransformerException {
+    public ResponseEntity<String> watchRecipes() throws TransformerException {
         return watchEntities("recipes");
+    }
+
+    @RequestMapping(value = "/xslt/history", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> watchHistory() throws TransformerException {
+        return watchEntities("history");
+    }
+    @RequestMapping(value = "/xslt/email_history", method = RequestMethod.GET, produces = {MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> watchEmailHistory() throws TransformerException {
+        return watchEntities("email_history");
     }
 
     private ResponseEntity<String> watchEntities(String type) throws TransformerException {

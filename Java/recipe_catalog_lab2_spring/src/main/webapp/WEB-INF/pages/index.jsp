@@ -6,9 +6,9 @@
 </head>
 <body>
 <div>
-    <a href="doctors">Doctors</a>
-    <a href="patients">Patients</a>
-    <a href="recipes">Recipes</a>
+    <a href="${pageContext.request.contextPath}/doctors">Doctors</a>
+    <a href="${pageContext.request.contextPath}/patients">Patients</a>
+    <a href="${pageContext.request.contextPath}/recipes">Recipes</a>
 </div>
 </body>
 </html>
